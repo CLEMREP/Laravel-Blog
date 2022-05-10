@@ -12,10 +12,9 @@ class WelcomePageTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    /** @test */
+    public function can_access_welcome_page()
     {
-        $reponse = $this->get('/');
-
-        $reponse->assertStatus(200);
+        $this->get('/')->assertSuccessful();
     }
 }

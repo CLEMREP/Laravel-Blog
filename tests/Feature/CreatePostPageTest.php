@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CreatePostPageTest extends TestCase
@@ -13,10 +11,9 @@ class CreatePostPageTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    /** @test */
+    public function can_access_post_create_form()
     {
-        $response = $this->get('/posts/create');
-
-        $response->assertStatus(200);
+        $this->get('/posts/create')->assertSuccessful();
     }
 }

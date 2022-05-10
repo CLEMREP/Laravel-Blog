@@ -11,7 +11,8 @@ class StorePostTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    /** @test */
+    public function can_store_post_in_database()
     {
         $this->assertDatabaseCount('posts', 0);
         $this->post('/posts/create', ['title' => 'Assert Test', 'content' => 'Ceci est un test Assertion']);
