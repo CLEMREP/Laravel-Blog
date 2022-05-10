@@ -15,7 +15,7 @@ class CreatePostPageTest extends TestCase
      */
     public function test_example()
     {
-        $response = $this->get('/create');
+        $response = $this->get('/posts/create');
 
         $response->assertStatus(200);
     }
