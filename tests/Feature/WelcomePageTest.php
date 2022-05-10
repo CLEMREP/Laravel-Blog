@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 
 
-class UrlTest extends TestCase
+class WelcomePageTest extends TestCase
 {
     /**
      * A basic unit test example.

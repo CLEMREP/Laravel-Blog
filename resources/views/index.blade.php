@@ -21,6 +21,9 @@
                             <a href="#" class="py-2 px-6 flex hover:text-blue-500">
                                 Blog
                             </a>
+                            <a href="#" class="py-2 px-6 flex hover:text-blue-500">
+                                Ajouter un article
+                            </a>
                             <a href="#" class="py-2 px-6 flex text-blue-500">
                                 Contact
                             </a>
