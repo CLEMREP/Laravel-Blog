@@ -7,11 +7,6 @@ use Tests\TestCase;
 
 class WelcomePageTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
     /** @test */
     public function can_access_welcome_page()
     {

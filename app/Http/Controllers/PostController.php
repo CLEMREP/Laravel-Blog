@@ -13,6 +13,17 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index()
+    {
+        $posts = Post::All();
+        return view('posts', ['title' => 'Articles'], compact('posts'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('create', ['title' => 'Create']);
@@ -30,6 +41,6 @@ class PostController extends Controller
         $data = $request->validated();
         $post = Post::create($data);
 
-        return redirect('/');
+        return redirect('/posts');
     }
 }
