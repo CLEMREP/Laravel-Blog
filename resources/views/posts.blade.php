@@ -19,7 +19,7 @@
                                 <a href="{{ route('posts.edit', ['post' => $post]) }}" class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">Edit</a>
                             </div>
                         </div>
-                        <div class="mt-4"><a href="#" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
+                        <div class="mt-4"><a href="{{ route('posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
                         </div>
                         <div class="flex items-center justify-between mt-4"><a href="#"
                                 class="text-blue-500 hover:underline">En savoir plus</a>

@@ -20,6 +20,19 @@ class PostController extends Controller
         return view('posts', ['title' => 'Articles'], compact('posts'));
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post)
+    {
+        return view('post', ['post' => $post]);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
