@@ -10,10 +10,10 @@
                         <div class="flex items-center justify-between">
                             <span class="font-light text-gray-600">{{ $post->created_at }}</span>
                             <div class="flex items-center">
-                                @if ($post->published == 0)
-                                    <span class="mr-4 text-red-500 font-medium">Article non publié</span>
-                                @else
+                                @if ($post->published)
                                     <span class="mr-4 text-green-500 font-medium">Article publié</span>
+                                @else
+                                    <span class="mr-4 text-red-500 font-medium">Article non publié</span>
                                 @endif
                                 
                                 <a href="{{ route('posts.edit', ['post' => $post]) }}" class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">Edit</a>
