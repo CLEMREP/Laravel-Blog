@@ -12,7 +12,7 @@ class UpdatePostTest extends TestCase
     /** @test */
     public function error_to_access_update_page_without_post()
     {
-        $this->post('/posts/edit/{post}')->assertStatus(404);
+        $this->post(route('posts.update', ['post']))->assertStatus(404);
     }
 
     /** @test */
@@ -25,12 +25,12 @@ class UpdatePostTest extends TestCase
     /** @test */
     public function post_has_been_updated()
     {
-        $this->assertDatabaseCount('posts', 0);
+        $post = Post::factory()->create();
+        $this->post(route('posts.update', ['post' => $post]), ['title' => 'Bonsoir !', 'content' => 'Comment vous allez ?']);
+        $post->refresh();
 
-        $post = Post::create(['title' => 'test Assert', 'content' => 'content Assert']);
-        $this->post(route('posts.update', ['post' => $post]));
-
-        $this->assertDatabaseCount('posts', 1);
+        $this->assertEquals($post->title, "Bonsoir !");
+        $this->assertEquals($post->content, "Comment vous allez ?");
     }
 
 }
