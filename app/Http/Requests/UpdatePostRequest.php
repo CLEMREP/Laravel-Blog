@@ -18,7 +18,8 @@ class UpdatePostRequest extends FormRequest
 
         return [
             'title' => ['required', 'max:255', Rule::unique('posts')->ignore($post->getKey())],
-            'content' => 'required'
+            'content' => 'required',
+            'published' => 'required'
         ];
     }
 
