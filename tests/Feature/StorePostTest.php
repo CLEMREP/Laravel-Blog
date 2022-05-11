@@ -6,11 +6,6 @@ use Tests\TestCase;
 
 class StorePostTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
     /** @test */
     public function can_store_post_in_database()
     {

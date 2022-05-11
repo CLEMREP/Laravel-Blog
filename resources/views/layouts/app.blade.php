@@ -18,7 +18,7 @@
                             <a href="{{ route('index') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Accueil
                             </a>
-                            <a href="#" class="py-2 px-6 flex hover:text-blue-500">
+                            <a href="{{ route('posts.index') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Blog
                             </a>
                             <a href="{{ route('posts.create') }}" class="py-2 px-6 flex hover:text-blue-500">
