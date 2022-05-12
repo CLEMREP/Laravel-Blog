@@ -26,7 +26,7 @@ class UpdatePostTest extends TestCase
     public function post_has_been_updated()
     {
         $post = Post::factory()->create();
-        $this->post(route('posts.update', ['post' => $post]), ['title' => 'Bonsoir !', 'content' => 'Comment vous allez ?']);
+        $this->post(route('posts.update', ['post' => $post]), ['title' => 'Bonsoir !', 'content' => 'Comment vous allez ?', 'published' => 0]);
         $post->refresh();
 
         $this->assertEquals($post->title, "Bonsoir !");

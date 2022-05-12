@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 
@@ -55,6 +57,16 @@ class PostController extends Controller
         $data = $request->validated();
         $post = Post::create($data);
 
+        if($request->hasFile('picture')){
+            $path = $request->file('picture')->storeAs('pictures_posts', time() . '.' . $request->picture->extension(), 'public');
+ 
+            $image = new Image();
+            $image->path = $path;
+    
+            $post->image()->save($image);
+        };
+
+
         return redirect('/posts');
     }
 
@@ -81,6 +93,19 @@ class PostController extends Controller
         /** @var array $data */
         $data = $request->validated();
         $post->update($data);
+
+        if($request->hasFile('picture')){
+            $path = $request->file('picture')->storeAs('pictures_posts', time() . '.' . $request->picture->extension(), 'public');
+            if(DB::table('images')->where('post_id', $post->getKey())->exists()) {
+                DB::table('images')->where('post_id', $post->getKey())->update(['path' => $path]);
+            } else {
+                $image = new Image();
+                $image->path = $path;
+        
+                $post->image()->save($image);
+            }
+
+        };
 
         return redirect('/posts');
     }

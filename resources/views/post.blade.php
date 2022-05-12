@@ -18,8 +18,9 @@
                   Cryptocurrency
                 </a> --}}
               </div>
-      
-              <img src="https://images.unsplash.com/photo-1587614387466-0a72ca909e16?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80" class="w-full object-cover lg:rounded" style="height: 28em;"/>
+              @if (!is_null($post->image))
+                <img src="{{ '../' . $post->image->path }}" class="w-full object-cover lg:rounded" style="height: 28em;"/>
+              @endif
             </div>
       
             <div class="flex flex-col">
@@ -40,7 +41,7 @@
                         <p class="font-semibold text-gray-600 text-xs"> Editor </p>
                       </div>
                     </div>
-                  <p class="mt-2 font-semibold text-gray-600 text-xs"> Crée le {{ $post->created_at }} </p>
+                  <p class="mt-2 font-semibold text-gray-600 text-xs"> Crée le {{ $post->created_at->format('d/m/y') }} à {{ $post->created_at->format('H:m') }} </p>
                 </div>
               </div>
       
