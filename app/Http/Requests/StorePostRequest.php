@@ -16,7 +16,7 @@ class StorePostRequest extends FormRequest
         return [
             'title' => 'required|unique:posts|max:255',
             'content' => 'required',
-            'published' => 'required'
+            'published' => 'required|boolean'
         ];
     }
 
