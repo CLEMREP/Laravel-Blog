@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePostRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,8 +14,10 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
+        $post = $this->post;
+
         return [
-            'title' => 'required|unique:posts|max:255',
+            'title' => ['required', 'max:255', Rule::unique('posts')->ignore($post->getKey())],
             'content' => 'required',
             'published' => 'required|boolean'
         ];
