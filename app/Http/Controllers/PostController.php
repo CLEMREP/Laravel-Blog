@@ -7,6 +7,7 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
@@ -62,8 +63,10 @@ class PostController extends Controller
  
             $image = new Image();
             $image->path = $path;
-    
-            $post->image()->save($image);
+            $image->save();
+
+            $post->image_id = $image->getKey();
+            $post->save();
         };
 
 
@@ -96,13 +99,18 @@ class PostController extends Controller
 
         if($request->hasFile('picture')){
             $path = $request->file('picture')->storeAs('pictures_posts', time() . '.' . $request->picture->extension(), 'public');
-            if(DB::table('images')->where('post_id', $post->getKey())->exists()) {
-                DB::table('images')->where('post_id', $post->getKey())->update(['path' => $path]);
+            if ($post->image) {
+                $oldPath = $post->image->path;
+                $post->image->path = $path;
+                $post->image->save();
+                Storage::disk('public')->delete($oldPath);
             } else {
                 $image = new Image();
                 $image->path = $path;
-        
-                $post->image()->save($image);
+                $image->save();
+    
+                $post->image_id = $image->getKey();
+                $post->save();
             }
 
         };

@@ -22,6 +22,6 @@ class Post extends Model
     ];
 
     public function Image() {
-        return $this->hasOne(Image::class);
+        return $this->belongsTo(Image::class);
     }
 }
