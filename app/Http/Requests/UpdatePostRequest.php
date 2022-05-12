@@ -19,7 +19,8 @@ class UpdatePostRequest extends FormRequest
         return [
             'title' => ['required', 'max:255', Rule::unique('posts')->ignore($post->getKey())],
             'content' => 'required',
-            'published' => 'required|boolean'
+            'published' => 'required|boolean',
+            'picture' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
 
@@ -35,6 +36,7 @@ class UpdatePostRequest extends FormRequest
             'title.unique' => 'Le titre est déjà existant.',
             'title.max' => 'Le titre doit faire un maximum :max caractères.',
             'content.required' => 'Vous devez insérer un contenu.',
+            'picture.max' => 'L\'image doit faire maximum :max ko'
         ];
     }
 }

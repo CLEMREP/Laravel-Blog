@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->boolean('published')->default(0);
+            $table->foreignId('image_id')->nullable()->contrained();
             $table->timestamps();
         });
     }

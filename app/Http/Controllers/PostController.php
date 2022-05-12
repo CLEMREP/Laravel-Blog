@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
@@ -55,6 +58,18 @@ class PostController extends Controller
         $data = $request->validated();
         $post = Post::create($data);
 
+        if($request->hasFile('picture')){
+            $path = $request->file('picture')->storeAs('pictures_posts', time() . '.' . $request->picture->extension(), 'public');
+ 
+            $image = new Image();
+            $image->path = $path;
+            $image->save();
+
+            $post->image_id = $image->getKey();
+            $post->save();
+        };
+
+
         return redirect('/posts');
     }
 
@@ -81,6 +96,24 @@ class PostController extends Controller
         /** @var array $data */
         $data = $request->validated();
         $post->update($data);
+
+        if($request->hasFile('picture')){
+            $path = $request->file('picture')->storeAs('pictures_posts', time() . '.' . $request->picture->extension(), 'public');
+            if ($post->image) {
+                $oldPath = $post->image->path;
+                $post->image->path = $path;
+                $post->image->save();
+                Storage::disk('public')->delete($oldPath);
+            } else {
+                $image = new Image();
+                $image->path = $path;
+                $image->save();
+    
+                $post->image_id = $image->getKey();
+                $post->save();
+            }
+
+        };
 
         return redirect('/posts');
     }
