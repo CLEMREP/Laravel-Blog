@@ -39,5 +39,7 @@ class StorePostTest extends TestCase
 
         $image = Image::first();
         $this->assertEquals($post->image_id, $image->getKey());
+
+        $this->assertTrue(Storage::disk('public')->exists($image->path));
     }
 }

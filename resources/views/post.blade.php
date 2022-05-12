@@ -41,7 +41,7 @@
                         <p class="font-semibold text-gray-600 text-xs"> Editor </p>
                       </div>
                     </div>
-                  <p class="mt-2 font-semibold text-gray-600 text-xs"> Crée le {{ $post->created_at->format('d/m/y') }} à {{ $post->created_at->format('H:m') }} </p>
+                  <p class="mt-2 font-semibold text-gray-600 text-xs"> Crée le {{ $post->created_at->format('d/m/y') }} à {{ $post->created_at->format('H:i') }} </p>
                 </div>
               </div>
       
