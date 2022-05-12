@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_blog')
 
 @section('content')
     <div class="container mx-auto px-6 sm:px-12 flex flex-col-reverse sm:flex-row items-center">
