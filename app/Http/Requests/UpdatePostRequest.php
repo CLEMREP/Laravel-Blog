@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Post;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,6 +15,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules()
     {
+        /** @var Post $post */
         $post = $this->post;
 
         return [

@@ -5,23 +5,36 @@ namespace App\Models;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property string $title
+ * @property string $content
+ * @property bool $published
+ * @property int $image_id
+ */
 class Post extends Model
 {
     use HasFactory;
 
      /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+      * The attributes that are mass assignable.
+      *
+      * @var array<int, string>
+      */
     protected $fillable = [
         'title',
         'content',
         'published'
     ];
 
-    public function Image() {
+    protected $casts = [
+        'image_id' => 'integer',
+        'published' => 'boolean'
+    ];
+
+    public function image() : BelongsTo
+    {
         return $this->belongsTo(Image::class);
     }
 }
