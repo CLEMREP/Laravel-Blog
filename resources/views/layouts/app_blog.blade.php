@@ -24,9 +24,15 @@
                             <a href="{{ route('posts.create') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Ajouter un article
                             </a>
-                            <a href="#" class="py-2 px-6 flex text-blue-500">
-                                Contact
-                            </a>
+                            @if (Auth::check())
+                                <a href="{{ route('dashboard') }}" class="py-2 px-6 flex text-blue-500">
+                                    Bonjour, {{ Auth::user()->name }} !
+                                </a>
+                            @else
+                                <a href="{{ route('login') }}" class="py-2 px-6 flex text-blue-500">
+                                    Connexion
+                                </a>
+                            @endif
                         </nav>
                         <button class="lg:hidden flex flex-col">
                             <span class="w-6 h-px bg-gray-900 mb-1"></span>
