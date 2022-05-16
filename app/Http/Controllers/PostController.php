@@ -42,10 +42,8 @@ class PostController extends Controller
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
-            /** @var UploadedFile $file */
-            $file = $request->file('picture');
             /** @var string $path */
-            $path = $file->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
+            $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
  
             $image = new Image();
             $image->path = $path;
@@ -73,10 +71,8 @@ class PostController extends Controller
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
-            /** @var UploadedFile $file */
-            $file = $request->file('picture');
             /** @var string $path */
-            $path = $file->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
+            $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
 
             if ($post->image) {
                 $oldPath = $post->image->path;
