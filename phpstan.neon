@@ -1,0 +1,16 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    level: max
+
+    ignoreErrors:
+#        - # escape Collection map method
+#            message: '%Parameter #1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\)\,mixed\>::(each|map|sum)\(\) expects callable\(mixed, \(int\|string\)\): .*, Closure.* given%'
+#            path: *
+
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
