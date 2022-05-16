@@ -5,6 +5,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Image;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -14,13 +15,15 @@ class StorePostTest extends TestCase
     /** @test */
     public function can_store_post_in_database()
     {
+        $user = User::factory()->create();
+
         Storage::fake('public');
 
         $this->assertDatabaseCount('images', 0);
         $this->assertDatabaseCount('posts', 0);
 
 
-        $this->post(
+        $this->actingAs($user)->post(
             route('posts.store'), 
             [
                 'title' => 'Assert Test',

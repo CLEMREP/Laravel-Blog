@@ -2,10 +2,8 @@
 
 @section('content')
 <main class="mt-10">
-
     <div class="mb-4 md:mb-0 w-full max-w-screen-md mx-auto relative" style="height: 24em;">
       
-
             <div class="mb-4 md:mb-0 w-full mx-auto relative">
               <div class="px-4 lg:px-0">
                 <h2 class="text-4xl font-semibold text-gray-800 leading-tight mb-4">
@@ -19,7 +17,7 @@
                 </a> --}}
               </div>
               @if (!is_null($post->image))
-                <img src="{{ '../' . $post->image->path }}" class="w-full object-cover lg:rounded" style="height: 28em;"/>
+                <img src="{{ asset($post->image->path) }}" class="w-full object-cover lg:rounded" style="height: 28em;"/>
               @endif
             </div>
       

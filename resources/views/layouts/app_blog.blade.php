@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <script src="{{ mix('js/app.js') }}" defer></script>
         <title>Laravel Blog - {{!empty($title) ? $title : ''}}</title>
     </head>
     <body>
@@ -18,11 +19,8 @@
                             <a href="{{ route('index') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Accueil
                             </a>
-                            <a href="{{ route('posts.index') }}" class="py-2 px-6 flex hover:text-blue-500">
+                            <a href="{{ route('user.posts.index') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Blog
-                            </a>
-                            <a href="{{ route('posts.create') }}" class="py-2 px-6 flex hover:text-blue-500">
-                                Ajouter un article
                             </a>
                             @if (Auth::check())
                                 <a href="{{ route('dashboard') }}" class="py-2 px-6 flex text-blue-500">

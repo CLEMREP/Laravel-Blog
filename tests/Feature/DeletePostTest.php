@@ -1,0 +1,30 @@
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\Post;
+use App\Models\User;
+
+class DeletePostTest extends TestCase
+{
+    /** @test */
+    public function try_to_delete_post_without_login() {
+        $post = Post::factory()->create();
+        $this->assertDatabaseCount('posts', 1);
+        $this->post(route('posts.destroy', $post))->assertRedirect();
+        $this->assertDatabaseCount('posts', 1);
+    }
+    /** @test */
+    public function can_delete_post()
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create();
+
+        $this->assertDatabaseCount('posts', 1);
+
+        $this->actingAs($user)->post(route('posts.destroy', $post));
+
+        $this->assertDatabaseCount('posts', 0);
+    }
+}

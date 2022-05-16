@@ -1,17 +1,51 @@
 @extends('layouts.app_blog')
 
-
 @section('content')
 <div class="px-6 py-8">
     <div class="container flex justify-between mx-auto">
         <div class="w-full lg:w-8/12">
             @foreach ($posts as $post)
-                <div class="mt-6">
+                <div x-data="{ 'showModal': false }" x-cloak class="mt-6">
                     <div class="max-w-4xl px-10 py-6 mx-auto bg-white rounded-lg shadow-md">
                         <div class="flex items-center justify-between">
-                            <span class="font-light text-gray-600">Crée le {{ $post->created_at->format('d/m/y') }} à {{ $post->created_at->format('H:i') }}</span>
+                            <span class="font-light text-gray-600">{{ $post->created_at }}</span>
+                            <div class="flex items-center">
+                                @if ($post->published)
+                                    <span class="px-2 py-1 font-bold text-green-100 bg-green-600 rounded hover:bg-green-500 mr-2">ON</span>
+                                @else
+                                    <span class="px-2 py-1 font-bold text-red-100 bg-red-600 rounded hover:bg-red-500 mr-2">OFF</span>
+                                @endif
+                                
+                                <a href="{{ route('posts.edit', $post) }}" class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500 mr-2">Edit</a>
+                                <button @click="showModal = true" class="block text-white bg-red-700 hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 px-2 py-1 font-bold text-red-100 bg-red-600 rounded hover:bg-red-500" type="button">
+                                    Delete
+                                </button>
+                            
+                                <div x-show="showModal" tabindex="-1" class="z-10 overflow-y-auto overflow-x-hidden fixed flex justify-center items-center z-50 md:inset-0 h-modal md:h-full">
+                                    <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                        @csrf
+                                        <div class="relative p-4 w-full max-w-md h-full md:h-auto"
+                                        x-show="showModal" @click.away="showModal = true">
+                                            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                                <button @click="showModal = false" type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="popup-modal">
+                                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
+                                                </button>
+                                                <div class="p-6 text-center">
+                                                    <svg class="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete "{{ $post->title }}" post?</h3>
+                                                    
+                                                        <button role="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                                                            Yes, I'm sure
+                                                        </button>
+                                                    <button @click="showModal = false" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="mt-4"><a href="{{ route('user.posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
+                        <div class="mt-4"><a href="{{ route('posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
                         </div>
                         <div class="flex items-center justify-between mt-4"><a href="#"
                                 class="text-blue-500 hover:underline">En savoir plus</a>
