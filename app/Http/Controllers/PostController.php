@@ -17,7 +17,7 @@ class PostController extends Controller
 
     public function show(Post $post) : View
     {
-        if($post->published) {
+        if ($post->published) { // Avec Middleware
             return view('post', ['post' => $post, 'title' => $post->title]);
         } else {
             abort(404);
