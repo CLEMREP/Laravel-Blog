@@ -19,7 +19,7 @@
                             <a href="{{ route('index') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Accueil
                             </a>
-                            <a href="{{ route('user.posts.index') }}" class="py-2 px-6 flex hover:text-blue-500">
+                            <a href="{{ route('posts.index') }}" class="py-2 px-6 flex hover:text-blue-500">
                                 Blog
                             </a>
                             @if (Auth::check())

@@ -20,10 +20,10 @@ Route::get('/', function () {
     return view('index', ['title' => 'Main']);
 })->name('index');
 
-Route::get('/posts/', [PostController::class, 'index'])->name('user.posts.index');
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('user.posts.show')->middleware(['published']);
+Route::get('/posts/', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware(['published']);
 
-Route::middleware(['auth'])->prefix('dashboard')->group(function () {
+Route::middleware(['auth'])->name('admin.')->prefix('dashboard')->group(function () {
     Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
 
     Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');

@@ -11,7 +11,7 @@
                         <div class="flex items-center justify-between">
                             <span class="font-light text-gray-600">Crée le {{ $post->created_at->format('d/m/y') }} à {{ $post->created_at->format('H:i') }}</span>
                         </div>
-                        <div class="mt-4"><a href="{{ route('user.posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
+                        <div class="mt-4"><a href="{{ route('posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
                         </div>
                         <div class="flex items-center justify-between mt-4"><a href="#"
                                 class="text-blue-500 hover:underline">En savoir plus</a>

@@ -16,13 +16,13 @@
                                     <span class="px-2 py-1 font-bold text-red-100 bg-red-600 rounded hover:bg-red-500 mr-2">OFF</span>
                                 @endif
                                 
-                                <a href="{{ route('posts.edit', $post) }}" class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500 mr-2">Edit</a>
+                                <a href="{{ route('admin.posts.edit', $post) }}" class="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500 mr-2">Edit</a>
                                 <button @click="showModal = true" class="block text-white bg-red-700 hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 px-2 py-1 font-bold text-red-100 bg-red-600 rounded hover:bg-red-500" type="button">
                                     Delete
                                 </button>
                             
                                 <div x-show="showModal" tabindex="-1" class="z-10 overflow-y-auto overflow-x-hidden fixed flex justify-center items-center z-50 md:inset-0 h-modal md:h-full">
-                                    <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                    <form action="{{ route('admin.posts.destroy', $post) }}" method="POST">
                                         @csrf
                                         <div class="relative p-4 w-full max-w-md h-full md:h-auto"
                                         x-show="showModal" @click.away="showModal = true">
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4"><a href="{{ route('posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
+                        <div class="mt-4"><a href="{{ route('admin.posts.show', ['post' => $post]) }}" class="text-2xl font-bold text-gray-700 hover:underline">{{ $post->title }}</a>
                         </div>
                         <div class="flex items-center justify-between mt-4"><a href="#"
                                 class="text-blue-500 hover:underline">En savoir plus</a>

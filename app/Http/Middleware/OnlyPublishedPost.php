@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class OnlyPublishedPost
@@ -16,7 +17,9 @@ class OnlyPublishedPost
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!($request->post->published)) {
+        /** @var Post $post */
+        $post = $request->post;
+        if (!($post->published)) {
             abort(404);
         }
         return $next($request);
