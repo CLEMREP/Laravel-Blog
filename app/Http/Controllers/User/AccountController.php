@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UpdateAccountRequest;
 
 class AccountController extends Controller
 {
@@ -17,7 +17,7 @@ class AccountController extends Controller
         return view('admin.account', ['title' => 'Mon compte', 'user' => Auth::user()]);
     }
 
-    public function update(UpdateUserRequest $request) : RedirectResponse
+    public function update(UpdateAccountRequest $request) : RedirectResponse
     {
         $request->validated();
         

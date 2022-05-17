@@ -8,16 +8,15 @@ use App\Models\User;
 class UpdateAccountTest extends TestCase
 {
     /** @test */
-    public function error_to_access_update_account_page_without_login()
+    public function can_access_update_account_page_with_login()
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->post(route('account.update', ['user']))->assertStatus(302);
+        $this->actingAs($user)->post(route('account.update'))->assertStatus(302);
     }
 
     /** @test */
-    public function can_access_update_account_page()
+    public function error_to_access_update_account_page_without_login()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user)->get(route('account.update', ['user' => $user]))->assertSuccessful();
+        $this->post(route('account.update'))->assertRedirect(route('login'));
     }
 }

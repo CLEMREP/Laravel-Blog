@@ -8,9 +8,17 @@ use App\Models\User;
 class EditAccountTest extends TestCase
 {
     /** @test */
-    public function can_access_user_account_page()
+    public function can_access_user_admin_account_page()
     {
         $user = User::factory()->create(['admin' => 1]);
+        $this->actingAs($user)->get(route('account.edit', ['user' => $user]))
+        ->assertSuccessful();
+    }
+
+    /** @test */
+    public function can_access_user_account_page()
+    {
+        $user = User::factory()->create();
         $this->actingAs($user)->get(route('account.edit', ['user' => $user]))
         ->assertSuccessful();
     }
