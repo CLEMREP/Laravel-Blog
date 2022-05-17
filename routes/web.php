@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\User\AccountController as UserAccountController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +26,8 @@ Route::get('/posts/', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware(['published']);
 
 Route::middleware(['auth'])->name('admin.')->prefix('dashboard')->group(function () {
+    Route::get('/compte', [UserAccountController::class, 'edit'])->name('account.edit');
+    Route::post('/compte', [UserAccountController::class, 'update'])->name('account.update');
 
     Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
 
@@ -37,7 +40,7 @@ Route::middleware(['auth'])->name('admin.')->prefix('dashboard')->group(function
     Route::post('/posts/edit/{post}', [AdminPostController::class, 'update'])->name('posts.update');
 
     Route::post('/posts/delete/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
-    
+
     Route::middleware(['admin'])->group(function () {
         Route::get('/users/', [AdminUserController::class, 'index'])->name('users.index');
 

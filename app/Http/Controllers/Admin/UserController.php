@@ -52,7 +52,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user) : RedirectResponse
     {
-        $data = $request->validated();
+        $request->validated();
         /** @var string $password */
         $password = $request->password;
         if (is_null($request->password)) {
