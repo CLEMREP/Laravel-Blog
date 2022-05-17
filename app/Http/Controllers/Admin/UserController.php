@@ -55,8 +55,7 @@ class UserController extends Controller
         $data = $request->validated();
         /** @var string $password */
         $password = $request->password;
-
-        if (!($request->has('password'))) {
+        if (is_null($request->password)) {
             $user->update(
                 [
                     'name' => $request->username,
