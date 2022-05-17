@@ -55,12 +55,13 @@ class UserController extends Controller
         $data = $request->validated();
         /** @var string $password */
         $password = $request->password;
-        
+
         if (!($request->has('password'))) {
             $user->update(
                 [
                     'name' => $request->username,
                     'email' => $request->email,
+                    'admin' => $request->get('admin', false)
                 ]
             );
         } else {
@@ -69,15 +70,12 @@ class UserController extends Controller
                     'name' => $request->username,
                     'email' => $request->email,
                     'password' => Hash::make($password),
+                    'admin' => $request->get('admin', false)
                 ]
             );
         }
 
 
-        if ($request->has('admin')) {
-            $user->admin = true;
-            $user->save();
-        }
 
         return redirect('/dashboard/users');
     }

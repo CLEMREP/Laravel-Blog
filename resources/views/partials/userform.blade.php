@@ -55,7 +55,7 @@
                     </div>
                     <div>
                         <label class="inline-flex items-center mt-6">
-                            <input name="admin" type="checkbox" class="@error('title') border-red-500 @enderror form-checkbox rounded-sm h-5 w-5 text-blue-600"
+                            <input name="admin" type="checkbox" value="1" class="@error('title') border-red-500 @enderror form-checkbox rounded-sm h-5 w-5 text-blue-600"
                             @if (!(is_null($user)) && $user->admin)
                                 @checked(true)   
                             @endif>

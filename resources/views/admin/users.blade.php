@@ -40,7 +40,7 @@
                                 <tr class="hover:bg-gray-50 border-b border-gray-200 py-10" x-data="{ 'showModal': false }" x-cloak>
                                     <td class="px-4 py-4">{{ $user->name }}</td>
                                     <td class="px-4 py-4">{{ $user->email }}</td>
-                                    <td class="px-4 py-4">{{ $user->admin }}</td>
+                                    <td class="px-4 py-4">{{ $user->admin ? 'Oui' : 'Non' }}</td>
                                     <td class="px-4 py-4 w-1/12">
                                         <a href="{{ route('admin.users.edit', $user) }}">
                                             <button role="submit" class="rounded-sm py-2 px-3 bg-blue-500 text-white hover:bg-blue-400" required>Modifier</button>
