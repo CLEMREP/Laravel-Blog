@@ -17,8 +17,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function rules()
     {
-        /** @var User $user */
-        $user = Auth::user();
+        $user = $this->getRequestUser();
 
         return
         [
@@ -43,5 +42,13 @@ class UpdateAccountRequest extends FormRequest
             'password.required' => 'Vous devez insérer un mot de passe',
             'password.min' => 'Le mot de passe doit faire minimum :min charactères'
         ];
+    }
+
+    protected function getRequestUser(): User
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $user;
     }
 }
