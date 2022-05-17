@@ -17,10 +17,13 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
+        /** @var User $user */
+        $user = Auth::user();
+
         return
         [
-            'username' => ['required', 'string', 'max:255', Rule::unique('users', 'name')->ignore(Auth::user()->id)],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->getKey())],
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
         ];
     }

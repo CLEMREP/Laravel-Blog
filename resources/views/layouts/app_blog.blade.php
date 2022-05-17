@@ -23,7 +23,7 @@
                                 Blog
                             </a>
                             @if (Auth::check())
-                                <a href="{{ route('dashboard') }}" class="py-2 px-6 flex text-blue-500">
+                                <a href="{{ route('account.edit') }}" class="py-2 px-6 flex text-blue-500">
                                     Bonjour, {{ Auth::user()->name }} !
                                 </a>
                             @else

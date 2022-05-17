@@ -25,11 +25,11 @@ Route::get('/', function () {
 Route::get('/posts/', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware(['published']);
 
-Route::middleware(['auth'])->prefix('dashboard')->group(function () {
-    Route::get('/compte', [UserAccountController::class, 'edit'])->name('account.edit');
-    Route::post('/compte', [UserAccountController::class, 'update'])->name('account.update');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mon-compte', [UserAccountController::class, 'edit'])->name('account.edit');
+    Route::post('/mon-compte', [UserAccountController::class, 'update'])->name('account.update');
 
-    Route::middleware(['admin'])->name('admin.')->group(function () {
+    Route::middleware(['admin'])->name('admin.')->prefix('dashboard')->group(function () {
         Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
 
         Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
@@ -57,6 +57,6 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'admin'])->name('dashboard');
 
 require __DIR__.'/auth.php';
