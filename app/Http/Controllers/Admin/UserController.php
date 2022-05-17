@@ -38,7 +38,7 @@ class UserController extends Controller
         );
 
         if ($request->has('admin')) {
-            $user->admin = 1;
+            $user->admin = true;
             $user->save();
         }
 
@@ -75,7 +75,7 @@ class UserController extends Controller
 
 
         if ($request->has('admin')) {
-            $user->admin = 1;
+            $user->admin = true;
             $user->save();
         }
 
