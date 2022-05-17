@@ -5,16 +5,27 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('index') }}">
                         <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if (Auth::user()->admin)
+                        <x-nav-link :href="route('admin.posts.index')" :active="request()->routeIs('admin.posts.index')">
+                            {{ __('Listes des articles') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.posts.create')" :active="request()->routeIs('admin.posts.create')">
+                            {{ __('Création d\'un article') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                            {{ __('Listes des utilisateurs') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users.create')" :active="request()->routeIs('admin.users.create')">
+                            {{ __('Création d\'un utilisateur') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -35,13 +46,17 @@
 
                     <x-slot name="content">
                         <!-- Authentication -->
+                        @if (Auth::user()->admin)
+                            <x-dropdown-link :href="route('account.edit')">
+                                {{ __('Mon compte') }}
+                            </x-dropdown-link>
+                        @endif
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Déconnexion') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>

@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\User\AccountController as UserAccountController;
 use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,17 +23,40 @@ Route::get('/', function () {
 })->name('index');
 
 Route::get('/posts/', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware(['published']);
 
-Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-Route::post('/posts/create', [PostController::class, 'store'])->name('posts.store');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mon-compte', [UserAccountController::class, 'edit'])->name('account.edit');
+    Route::post('/mon-compte', [UserAccountController::class, 'update'])->name('account.update');
 
-Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::middleware(['admin'])->name('admin.')->prefix('dashboard')->group(function () {
+        Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
 
-Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('posts.edit');
-Route::post('/posts/edit/{post}', [PostController::class, 'update'])->name('posts.update');
+        Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
+        Route::post('/posts/create', [AdminPostController::class, 'store'])->name('posts.store');
+        
+        Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('posts.show');
+
+        Route::get('/posts/edit/{post}', [AdminPostController::class, 'edit'])->name('posts.edit');
+        Route::post('/posts/edit/{post}', [AdminPostController::class, 'update'])->name('posts.update');
+
+        Route::post('/posts/delete/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+
+        Route::get('/users/', [AdminUserController::class, 'index'])->name('users.index');
+
+        Route::get('/users/edit/{user}', [AdminUserController::class, 'edit'])->name('users.edit');
+        Route::post('/users/edit/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    
+        Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+        Route::post('/users/create', [AdminUserController::class, 'store'])->name('users.store');
+    
+        Route::post('/users/delete/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    });
+});
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'admin'])->name('dashboard');
 
 require __DIR__.'/auth.php';

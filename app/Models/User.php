@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $password
  * @property datetime $email_verified_at
  * @property string $remember_token
+ * @property bool $admin
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -26,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'admin'
     ];
 
     /**
@@ -41,5 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'admin' => 'boolean'
     ];
 }

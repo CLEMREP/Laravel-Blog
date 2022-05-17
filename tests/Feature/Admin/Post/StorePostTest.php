@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin\Post;
 
 
 use Tests\TestCase;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Image;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -14,14 +15,16 @@ class StorePostTest extends TestCase
     /** @test */
     public function can_store_post_in_database()
     {
+        $user = User::factory()->create(['admin' => 1]);
+
         Storage::fake('public');
 
         $this->assertDatabaseCount('images', 0);
         $this->assertDatabaseCount('posts', 0);
 
 
-        $this->post(
-            route('posts.store'), 
+        $this->actingAs($user)->post(
+            route('admin.posts.store'), 
             [
                 'title' => 'Assert Test',
                 'content' => 'Ceci est un test Assertion',
