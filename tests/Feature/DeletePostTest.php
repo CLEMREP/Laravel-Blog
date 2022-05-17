@@ -12,9 +12,10 @@ class DeletePostTest extends TestCase
     public function try_to_delete_post_without_login() {
         $post = Post::factory()->create();
         $this->assertDatabaseCount('posts', 1);
-        $this->post(route('posts.destroy', $post))->assertRedirect();
+        $this->post(route('admin.posts.destroy', $post))->assertRedirect();
         $this->assertDatabaseCount('posts', 1);
     }
+    
     /** @test */
     public function can_delete_post()
     {
@@ -23,7 +24,7 @@ class DeletePostTest extends TestCase
 
         $this->assertDatabaseCount('posts', 1);
 
-        $this->actingAs($user)->post(route('posts.destroy', $post));
+        $this->actingAs($user)->post(route('admin.posts.destroy', $post));
 
         $this->assertDatabaseCount('posts', 0);
     }

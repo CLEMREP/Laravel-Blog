@@ -22,7 +22,7 @@ class EditPostTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        $this->actingAs($user)->get(route('posts.edit', ['post' => $post]))->assertSuccessful();
+        $this->actingAs($user)->get(route('admin.posts.edit', ['post' => $post]))->assertSuccessful();
     }
 
     /** @test */
@@ -31,7 +31,7 @@ class EditPostTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('posts.edit', ['post' => $post]));
+        $response = $this->actingAs($user)->get(route('admin.posts.edit', ['post' => $post]));
         $response->assertSeeInOrder([$post->title, $post->content]);
     }
 }

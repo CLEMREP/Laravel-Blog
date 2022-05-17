@@ -24,7 +24,7 @@ class StorePostTest extends TestCase
 
 
         $this->actingAs($user)->post(
-            route('posts.store'), 
+            route('admin.posts.store'), 
             [
                 'title' => 'Assert Test',
                 'content' => 'Ceci est un test Assertion',

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,6 +25,7 @@ Route::get('/posts/', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware(['published']);
 
 Route::middleware(['auth'])->name('admin.')->prefix('dashboard')->group(function () {
+
     Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
 
     Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
@@ -35,6 +37,18 @@ Route::middleware(['auth'])->name('admin.')->prefix('dashboard')->group(function
     Route::post('/posts/edit/{post}', [AdminPostController::class, 'update'])->name('posts.update');
 
     Route::post('/posts/delete/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+    
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/users/', [AdminUserController::class, 'index'])->name('users.index');
+
+        Route::get('/users/edit/{user}', [AdminUserController::class, 'edit'])->name('users.edit');
+        Route::post('/users/edit/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    
+        Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+        Route::post('/users/create', [AdminUserController::class, 'store'])->name('users.store');
+    
+        Route::post('/users/delete/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    });
 });
 
 

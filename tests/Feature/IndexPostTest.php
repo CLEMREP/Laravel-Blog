@@ -22,7 +22,7 @@ class IndexPostTest extends TestCase
         $user = User::factory()->create();
         $posts = Post::factory()->count(3)->create();
 
-        $reponse = $this->actingAs($user)->get(route('posts.index'));
+        $reponse = $this->actingAs($user)->get(route('admin.posts.index'));
         $data = $reponse->viewData("posts");
 
         $this->assertCount(3, $data);

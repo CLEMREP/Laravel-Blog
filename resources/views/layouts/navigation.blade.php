@@ -15,12 +15,20 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.posts.index')">
+                    <x-nav-link :href="route('admin.posts.index')" :active="request()->routeIs('admin.posts.index')">
                         {{ __('Listes des articles') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.posts.create')">
+                    <x-nav-link :href="route('admin.posts.create')" :active="request()->routeIs('admin.posts.create')">
                         {{ __('Création d\'un article') }}
                     </x-nav-link>
+                    @if (Auth::user()->admin)
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                            {{ __('Listes des utilisateurs') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.users.create')" :active="request()->routeIs('admin.users.create')">
+                            {{ __('Création d\'un utilisateur') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -47,7 +55,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Déconnexion') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>

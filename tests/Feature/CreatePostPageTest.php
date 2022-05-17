@@ -13,6 +13,6 @@ class CreatePostPageTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->actingAs($user)->get(route('posts.create'))->assertSuccessful();
+        $this->actingAs($user)->get(route('admin.posts.create'))->assertSuccessful();
     }
 }

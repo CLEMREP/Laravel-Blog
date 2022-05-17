@@ -17,7 +17,7 @@ class UpdatePostTest extends TestCase
     public function error_to_access_update_page_without_post()
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->post(route('posts.update', ['post']))->assertStatus(404);
+        $this->actingAs($user)->post(route('admin.posts.update', ['post']))->assertStatus(404);
     }
 
     /** @test */
@@ -25,7 +25,7 @@ class UpdatePostTest extends TestCase
     {
         $post = Post::factory()->create();
         $user = User::factory()->create();
-        $this->actingAs($user)->get(route('posts.update', ['post' => $post]))->assertSuccessful();
+        $this->actingAs($user)->get(route('admin.posts.update', ['post' => $post]))->assertSuccessful();
     }
 
     /** @test */
@@ -38,7 +38,7 @@ class UpdatePostTest extends TestCase
         $post = Post::factory()->create();
         $this->assertNull($post->image_id);
 
-        $this->actingAs($user)->post(route('posts.update', ['post' => $post]), ['title' => 'Bonsoir !', 'content' => 'Comment vous allez ?', 'published' => 1, 'picture' => UploadedFile::fake()->image('postimage.jpg')]);
+        $this->actingAs($user)->post(route('admin.posts.update', ['post' => $post]), ['title' => 'Bonsoir !', 'content' => 'Comment vous allez ?', 'published' => 1, 'picture' => UploadedFile::fake()->image('postimage.jpg')]);
         $post->refresh();
 
         $this->assertEquals($post->title, "Bonsoir !");
