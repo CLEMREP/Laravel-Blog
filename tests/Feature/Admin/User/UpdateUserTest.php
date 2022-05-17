@@ -18,10 +18,12 @@ class UpdateUserTest extends TestCase
     public function can_update_user_with_admin_account()
     {
         $user = User::factory()->create(['admin' => 1]);
-        $edituser = User::factory()->create();
+        $edituser = User::factory()->create(['email' => 'salut@test.com']);
 
         $this->actingAs($user)->post(route('admin.users.update', $edituser), ['username' => $edituser->name, 'email' => 'test@test.org'])->assertStatus(302);
 
-        $this->assertNotSame($edituser->email, 'test@test.org');
+        $edituser->refresh();
+        $this->assertNotSame('salut@test.com', $edituser->email);
+        $this->assertSame('test@test.org', $edituser->email);
     }
 }

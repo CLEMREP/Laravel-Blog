@@ -11,7 +11,10 @@ class UpdateAccountTest extends TestCase
     public function can_access_update_account_page_with_login()
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->post(route('account.update'))->assertStatus(302);
+        $this->actingAs($user)->post(route('account.update'), ['username' => 'test', 'email' => 'test@test.com'])->assertRedirect(route('account.edit'));
+
+        $this->assertSame('test', $user->name);
+        $this->assertSame('test@test.com', $user->email);
     }
 
     /** @test */
