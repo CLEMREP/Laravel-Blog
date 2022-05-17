@@ -24,7 +24,13 @@ class UpdatePostTest extends TestCase
         $post = Post::factory()->create();
         $user = User::factory()->create(['admin' => 1]);
         
-        $this->actingAs($user)->get(route('admin.posts.update', ['post' => $post]))->assertSuccessful();
+        $this->actingAs($user)->post(route('admin.posts.update', $post),
+        [
+            'title' => $post->title,
+            'content' => $post->content,
+            'published' => 1
+        ])
+        ->assertRedirect(route('admin.posts.index'));
     }
 
     /** @test */
