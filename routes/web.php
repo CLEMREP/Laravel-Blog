@@ -25,23 +25,23 @@ Route::get('/', function () {
 Route::get('/posts/', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')->middleware(['published']);
 
-Route::middleware(['auth'])->name('admin.')->prefix('dashboard')->group(function () {
+Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('/compte', [UserAccountController::class, 'edit'])->name('account.edit');
     Route::post('/compte', [UserAccountController::class, 'update'])->name('account.update');
 
-    Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
+    Route::middleware(['admin'])->name('admin.')->group(function () {
+        Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
 
-    Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
-    Route::post('/posts/create', [AdminPostController::class, 'store'])->name('posts.store');
-    
-    Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('posts.show');
+        Route::get('/posts/create', [AdminPostController::class, 'create'])->name('posts.create');
+        Route::post('/posts/create', [AdminPostController::class, 'store'])->name('posts.store');
+        
+        Route::get('/posts/{post}', [AdminPostController::class, 'show'])->name('posts.show');
 
-    Route::get('/posts/edit/{post}', [AdminPostController::class, 'edit'])->name('posts.edit');
-    Route::post('/posts/edit/{post}', [AdminPostController::class, 'update'])->name('posts.update');
+        Route::get('/posts/edit/{post}', [AdminPostController::class, 'edit'])->name('posts.edit');
+        Route::post('/posts/edit/{post}', [AdminPostController::class, 'update'])->name('posts.update');
 
-    Route::post('/posts/delete/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+        Route::post('/posts/delete/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
 
-    Route::middleware(['admin'])->group(function () {
         Route::get('/users/', [AdminUserController::class, 'index'])->name('users.index');
 
         Route::get('/users/edit/{user}', [AdminUserController::class, 'edit'])->name('users.edit');

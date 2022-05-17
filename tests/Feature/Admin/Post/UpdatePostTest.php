@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin\Post;
 
 use Tests\TestCase;
 use App\Models\Post;
@@ -8,15 +8,13 @@ use App\Models\User;
 use App\Models\Image;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UpdatePostTest extends TestCase
 {
     /** @test */
     public function error_to_access_update_page_without_post()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
         $this->actingAs($user)->post(route('admin.posts.update', ['post']))->assertStatus(404);
     }
 
@@ -24,7 +22,8 @@ class UpdatePostTest extends TestCase
     public function can_access_update_page()
     {
         $post = Post::factory()->create();
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
+        
         $this->actingAs($user)->get(route('admin.posts.update', ['post' => $post]))->assertSuccessful();
     }
 
@@ -33,9 +32,9 @@ class UpdatePostTest extends TestCase
     {
         Storage::fake('public');
         
-        $user = User::factory()->create();
-
+        $user = User::factory()->create(['admin' => 1]);
         $post = Post::factory()->create();
+
         $this->assertNull($post->image_id);
 
         $this->actingAs($user)->post(route('admin.posts.update', ['post' => $post]), ['title' => 'Bonsoir !', 'content' => 'Comment vous allez ?', 'published' => 1, 'picture' => UploadedFile::fake()->image('postimage.jpg')]);

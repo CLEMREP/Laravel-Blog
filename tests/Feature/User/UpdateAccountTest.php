@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\User;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -11,13 +11,13 @@ class UpdateAccountTest extends TestCase
     public function error_to_access_update_account_page_without_login()
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->post(route('admin.account.update', ['user']))->assertStatus(302);
+        $this->actingAs($user)->post(route('account.update', ['user']))->assertStatus(302);
     }
 
     /** @test */
     public function can_access_update_account_page()
     {
         $user = User::factory()->create();
-        $this->actingAs($user)->get(route('admin.account.update', ['user' => $user]))->assertSuccessful();
+        $this->actingAs($user)->get(route('account.update', ['user' => $user]))->assertSuccessful();
     }
 }

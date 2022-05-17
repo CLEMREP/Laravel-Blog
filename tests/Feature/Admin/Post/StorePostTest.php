@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin\Post;
 
 
 use Tests\TestCase;
@@ -15,7 +15,7 @@ class StorePostTest extends TestCase
     /** @test */
     public function can_store_post_in_database()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
 
         Storage::fake('public');
 

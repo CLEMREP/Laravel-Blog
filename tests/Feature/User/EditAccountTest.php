@@ -1,11 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\User;
 
 use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EditAccountTest extends TestCase
 {
@@ -13,7 +11,7 @@ class EditAccountTest extends TestCase
     public function can_access_user_account_page()
     {
         $user = User::factory()->create(['admin' => 1]);
-        $this->actingAs($user)->get(route('admin.account.edit', ['user' => $user]))
+        $this->actingAs($user)->get(route('account.edit', ['user' => $user]))
         ->assertSuccessful();
     }
 
@@ -22,7 +20,7 @@ class EditAccountTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get(route('admin.account.edit', ['user' => $user]));
+        $response = $this->actingAs($user)->get(route('account.edit', ['user' => $user]));
         $response->assertSeeInOrder([$user->name, $user->email]);
     }
 }

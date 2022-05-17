@@ -13,6 +13,9 @@ refresh: ## Refresh databases
 admin: ## Create Admin user
 	php artisan db:seed --class=UsersTableSeeder
 
+atest: ## Run test php artisan
+	php artisan test
+
 test: ## Run test suit
 	./vendor/bin/phpcs
 	./vendor/bin/phpstan --memory-limit=-1

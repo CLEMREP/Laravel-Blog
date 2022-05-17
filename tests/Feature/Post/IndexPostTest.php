@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Post;
 
 use Tests\TestCase;
 use App\Models\Post;
@@ -19,7 +19,7 @@ class IndexPostTest extends TestCase
     /** @test */
     public function count_number_of_posts_between_array_and_database()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
         $posts = Post::factory()->count(3)->create();
 
         $reponse = $this->actingAs($user)->get(route('admin.posts.index'));

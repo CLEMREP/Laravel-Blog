@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin\Post;
 
 use Tests\TestCase;
 use App\Models\Post;
@@ -19,7 +19,7 @@ class DeletePostTest extends TestCase
     /** @test */
     public function can_delete_post()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
         $post = Post::factory()->create();
 
         $this->assertDatabaseCount('posts', 1);

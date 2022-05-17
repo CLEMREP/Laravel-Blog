@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white flex justify-center items-center">
                 <div class="w-full">
-                    <form class="bg-white p-10 rounded-lg shadow-lg min-w-full" action="{{ route('admin.account.update') }}" method="POST">
+                    <form class="bg-white p-10 rounded-lg shadow-lg min-w-full" action="{{ route('account.update') }}" method="POST">
                         @csrf
                         <h1 class="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">Mon compte</h1>
                         <div>

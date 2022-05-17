@@ -1,12 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin\Post;
 
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EditPostTest extends TestCase
 {
@@ -19,7 +17,7 @@ class EditPostTest extends TestCase
     /** @test */
     public function can_access_edit_page()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
         $post = Post::factory()->create();
 
         $this->actingAs($user)->get(route('admin.posts.edit', ['post' => $post]))->assertSuccessful();
@@ -28,7 +26,7 @@ class EditPostTest extends TestCase
     /** @test */
     public function title_and_content_are_in_edit_page()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['admin' => 1]);
         $post = Post::factory()->create();
 
         $response = $this->actingAs($user)->get(route('admin.posts.edit', ['post' => $post]));

@@ -44,6 +44,6 @@ class AccountController extends Controller
             );
         }
 
-        return redirect(route('admin.account.edit'));
+        return redirect(route('account.edit'));
     }
 }

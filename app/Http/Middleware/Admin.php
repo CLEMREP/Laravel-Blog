@@ -20,7 +20,7 @@ class Admin
     {
         /** @var User $user */
         $user = Auth::user();
-        if (($user->admin)) {
+        if ($user->admin) {
             return $next($request);
         }
             abort(404);
