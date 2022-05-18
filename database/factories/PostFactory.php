@@ -20,6 +20,7 @@ class PostFactory extends Factory
             'title' => $this->faker->title(),
             'content' => $this->faker->text(),
             'created_at' => now(),
+            'published' => 1,
         ];
     }
 }
