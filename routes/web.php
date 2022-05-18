@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\User\AccountController as UserAccountController;
-use App\Http\Controllers\PostController;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')
 Route::middleware(['auth'])->group(function () {
     Route::get('/mon-compte', [UserAccountController::class, 'edit'])->name('account.edit');
     Route::post('/mon-compte', [UserAccountController::class, 'update'])->name('account.update');
+
+    Route::post('/posts/{post}/comment/create', [CommentController::class, 'store'])->name('comments.store');
 
     Route::middleware(['admin'])->name('admin.')->prefix('dashboard')->group(function () {
         Route::get('/posts/', [AdminPostController::class, 'index'])->name('posts.index');
