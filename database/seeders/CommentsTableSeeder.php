@@ -15,7 +15,7 @@ class CommentsTableSeeder extends Seeder
      */
     public function run()
     {
-        foreach(Post::get() as $post) {
+        foreach (Post::get() as $post) {
             Comment::factory()->count(6)->create(['post_id' => $post->getKey()]);
         }
     }
