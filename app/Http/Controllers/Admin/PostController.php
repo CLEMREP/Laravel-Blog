@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Image;
 use Illuminate\View\View;
+use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
-use Illuminate\Http\UploadedFile;
 
 class PostController extends Controller
 {
@@ -22,7 +24,10 @@ class PostController extends Controller
 
     public function show(Post $post) : View
     {
-        return view('post', ['post' => $post, 'title' => $post->title]);
+        /** @var User $author */
+        $author = User::find($post->user_id);
+
+        return view('post', ['post' => $post, 'title' => $post->title, 'author' => $author->name]);
     }
 
     public function create() : View
@@ -34,7 +39,18 @@ class PostController extends Controller
     {
         /** @var array $data */
         $data = $request->validated();
-        $post = Post::create($data);
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        $post = Post::create(
+            [
+                'title' => $request->title,
+                'content' => $request->content,
+                'user_id' => $user->id,
+                'published' => $request->published,
+            ]
+        );
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */

@@ -61,7 +61,7 @@
                       <img src="https://icons.iconarchive.com/icons/diversity-avatars/avatars/256/charlie-chaplin-icon.png" class=" rounded-lg -top-8 -mb-4 bg-white border h-11 w-11" alt="" loading="lazy">
                       <div class="flex flex-col w-full">
                           <div class="flex flex-row justify-between">
-                              <p class="relative text-xl whitespace-nowrap truncate overflow-hidden">Clément REPEL</p>
+                              <p class="relative text-xl whitespace-nowrap truncate overflow-hidden">{{ $comment->user->name }}</p>
                               <a class="text-gray-500 text-xl" href="#"><i class="fa-solid fa-trash"></i></a>
                           </div>
                           <p class="text-gray-400 text-sm">Commenté le {{ $comment->created_at->format('d M Y') }} à {{ $comment->created_at->format('H\hi') }}</p>
@@ -77,8 +77,8 @@
                         <img src="https://randomuser.me/api/portraits/men/97.jpg"
                         class="h-10 w-10 rounded-full mr-2 object-cover" />
                       <div>
-                        <p class="font-semibold text-gray-700 text-sm"> Mike Sullivan </p>
-                        <p class="font-semibold text-gray-600 text-xs"> Editor </p>
+                        <p class="font-semibold text-gray-700 text-sm"> {{ $post->author->name }} </p>
+                        <p class="font-semibold text-gray-600 text-xs"> Journaliste </p>
                       </div>
                     </div>
                   <p class="mt-2 font-semibold text-gray-600 text-xs"> Publié le {{ $post->created_at->format('d M Y') }} à {{ $post->created_at->format('H\hi') }} </p>

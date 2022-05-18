@@ -13,12 +13,17 @@ refresh: ## Refresh databases
 admin: ## Create Admin user
 	php artisan db:seed --class=UsersTableSeeder
 
+sdb: ## Seed DataBase
+	php artisan db:seed --class=UsersTableSeeder
+	php artisan db:seed --class=PostsTableSeeder
+	php artisan db:seed --class=CommentsTableSeeder
+
 test: ## Run test suit
 	./vendor/bin/phpcs
 	./vendor/bin/phpstan --memory-limit=-1
 
 cs: ## Run phpcs
-	bin/phpcs
+	./vendor/bin/phpcs
 
 csfix: ## Autofix phpcs errors
 	./vendor/bin/phpcbf

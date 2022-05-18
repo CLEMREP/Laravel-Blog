@@ -15,7 +15,7 @@ class StoreCommentTest extends TestCase
         $user = User::factory()->create();
         $post = Post::factory()->create();
 
-        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('users', 2);
         $this->assertDatabaseCount('posts', 1);
         $this->assertDatabaseCount('comments', 0);
 
@@ -27,7 +27,7 @@ class StoreCommentTest extends TestCase
         )
         ->assertRedirect(route('posts.show', $post))
         ->assertSessionHasNoErrors();
-
+        
         $this->assertDatabaseCount('comments', 1);
         
         $this->assertSame($post->getKey(), Comment::where('content', 'Ton article est génial !')->first()->post_id);
