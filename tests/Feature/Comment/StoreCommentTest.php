@@ -30,7 +30,7 @@ class StoreCommentTest extends TestCase
 
         $this->assertDatabaseCount('comments', 1);
         
-        $this->assertSame($post->getKey(), Comment::find(1)->getKey());
+        $this->assertSame($post->getKey(), Comment::where('content', 'Ton article est génial !')->first()->post_id);
     }
 
     /** @test */
@@ -47,9 +47,5 @@ class StoreCommentTest extends TestCase
         )
         ->assertRedirect(route('posts.show', $post))
         ->assertSessionHasNoErrors();
-
-
-        $response = $this->get(route('posts.show', $post));
-        $response->assertSeeText('Ton article est génial !');
     }
 }
