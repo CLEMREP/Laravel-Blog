@@ -55,7 +55,7 @@
                 </div>
             </div>
               @endif
-              @foreach ($post->comments as $comment)
+              @foreach ($post->comments->sortByDesc('created_at') as $comment)
                 <div class="mt-4 relative grid grid-cols-1 gap-4 p-4 mb-4 border rounded-lg bg-white shadow-lg">
                   <div class="relative flex gap-4">
                       <img src="https://icons.iconarchive.com/icons/diversity-avatars/avatars/256/charlie-chaplin-icon.png" class=" rounded-lg -top-8 -mb-4 bg-white border h-11 w-11" alt="" loading="lazy">
