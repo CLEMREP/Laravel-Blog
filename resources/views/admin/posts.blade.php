@@ -75,7 +75,7 @@
                                 @foreach ($posts as $post)
                                     <tr class="hover:bg-gray-50 border-b border-gray-200 py-10" x-data="{ 'showModal': false }" x-cloak>
                                         <td class="px-4 py-4">{{ $post->title }}</td>
-                                        <td class="px-4 py-4">{{ $post->author?->name }}</td>
+                                        <td class="px-4 py-4">{{ $post->author->name }}</td>
                                         <td class="px-4 py-4">{{ $post->created_at }}</td>
                                         <td class="px-4 py-4">{{ $post->published ? 'Oui' : 'Non' }}</td>
                                         <td class="px-4 py-4 w-1/12">
