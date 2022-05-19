@@ -22,7 +22,7 @@ class PostFactory extends Factory
             'content' => $this->faker->text(4000) ,
             'created_at' => now(),
             'published' => 1,
-            'user_id' => User::factory()
+            'user_id' => User::factory(),
         ];
     }
 }

@@ -33,9 +33,9 @@ class PostController extends Controller
                                           ->paginate(5);
             } else {
                 if (!is_null($request->get('order')) && !is_null($request->get('direction'))) {
-                    $posts = Post::orderBy($order, $direction)->paginate(5);
+                    $posts = Post::with('author')->orderBy($order, $direction)->paginate(5);
                 } else {
-                    $posts = Post::orderBy('title', 'asc')->paginate(5);
+                    $posts = Post::with('author')->orderBy('title', 'asc')->paginate(5);
                 }
             }
         }

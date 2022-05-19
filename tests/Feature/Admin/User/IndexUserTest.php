@@ -20,8 +20,8 @@ class IndexUserTest extends TestCase
     {
         $users = User::factory()->count(3)->create(['admin' => 1]);
 
-        $reponse = $this->actingAs($users[1])->get(route('admin.users.index'));
-        $data = $reponse->viewData("users");
+        $response = $this->actingAs($users[0])->get(route('admin.users.index', ['order' => 'created_at', 'direction' => 'asc']));
+        $data = $response->viewData("users");
 
         $this->assertCount(3, $data);
 
