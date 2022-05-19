@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -12,10 +13,23 @@ use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
-    public function index() : View
+    public function index(Request $request) : View
     {
-        $users = User::orderBy('created_at')->paginate(4);
-        return view('admin.users', ['title' => 'Utilisateurs'], compact('users'));
+        if (!is_null($request->get('order')) && !is_null($request->get('value'))) {
+            $users = User::select('*')->where($request->get('order'), '=', $request->get('value'))->paginate(5);
+        } else {
+            if (!is_null($request->get('search_user'))) {
+                $users = User::select('*')->where('name', 'like', '%' . $request->get('search_user') . '%')->paginate(5);
+            } else {
+                if (!is_null($request->get('order')) && !is_null($request->get('direction'))) {
+                    $users = User::orderBy($request->get('order'), $request->get('direction'))->paginate(5);
+                } else {
+                    $users = User::orderBy('name', 'asc')->paginate(5);
+                }
+            }
+        }
+        
+        return view('admin.users', ['title' => 'Liste des utilisateurs'], compact('users'));
     }
 
     public function create() : View
