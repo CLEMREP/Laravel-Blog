@@ -17,14 +17,21 @@ class PostController extends Controller
 {
     public function index(Request $request) : View
     {
+        /** @var string $order */
+        $order = $request->get('order');
+
+        /** @var string $direction */
+        $direction = $request->get('direction');
+
         if (!is_null($request->get('order')) && !is_null($request->get('value'))) {
-            $posts = Post::select('*')->where($request->get('order'), '=', $request->get('value'))->paginate(5);
+            $posts = Post::select('*')->where($order, '=', $request->get('value'))->paginate(5);
         } else {
             if (!is_null($request->get('search_title'))) {
-                $posts = Post::select('*')->where('title', 'like', '%' . $request->get('search_title') . '%')->paginate(5);
+                $posts = Post::select('*')->where('title', 'like', '%'.$request->get('search_title') . '%')
+                                          ->paginate(5);
             } else {
                 if (!is_null($request->get('order')) && !is_null($request->get('direction'))) {
-                    $posts = Post::orderBy($request->get('order'), $request->get('direction'))->paginate(5);
+                    $posts = Post::orderBy($order, $direction)->paginate(5);
                 } else {
                     $posts = Post::orderBy('title', 'asc')->paginate(5);
                 }
