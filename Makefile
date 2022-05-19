@@ -18,7 +18,7 @@ test: ## Run test suit
 	./vendor/bin/phpstan --memory-limit=-1
 
 cs: ## Run phpcs
-	bin/phpcs
+	./vendor/bin/phpcs
 
 csfix: ## Autofix phpcs errors
 	./vendor/bin/phpcbf

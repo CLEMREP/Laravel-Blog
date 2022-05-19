@@ -5,18 +5,33 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Post;
 use App\Models\Image;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
-use Illuminate\Http\UploadedFile;
 
 class PostController extends Controller
 {
-    public function index() : View
+    public function index(Request $request) : View
     {
-        $posts = Post::orderBy('created_at')->paginate(4);
+        if (!is_null($request->get('order')) && !is_null($request->get('value'))) {
+            $posts = Post::select('*')->where($request->get('order'), '=', $request->get('value'))->paginate(5);
+        } else {
+            if (!is_null($request->get('search_title'))) {
+                $posts = Post::select('*')->where('title', 'like', '%' . $request->get('search_title') . '%')->paginate(5);
+            } else {
+                if (!is_null($request->get('order')) && !is_null($request->get('direction'))) {
+                    $posts = Post::orderBy($request->get('order'), $request->get('direction'))->paginate(5);
+                } else {
+                    $posts = Post::orderBy('title', 'asc')->paginate(5);
+                }
+            }
+        }
+
+
         return view('admin.posts', ['title' => 'Articles'], compact('posts'));
     }
 

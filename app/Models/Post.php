@@ -40,6 +40,11 @@ class Post extends Model
         return $this->belongsTo(Image::class);
     }
 
+    public function author() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function comments() : HasMany
     {
         return $this->hasMany(Comment::class);
