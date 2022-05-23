@@ -33,14 +33,13 @@ class PostController extends Controller
 
         $query = Post::query()
                             ->orderBy($order, $direction)
-                            ->when($searchTitle, function ($query, $searchTitle) {
+                            ->when($searchTitle, function ($query) use($searchTitle) {
                                 $query->where('title', 'like', '%' . $searchTitle . '%');
+                            })
+                            ->when(!is_null($valuePublished), function($query) use($valuePublished, $order){
+                                $query->where($order, '=', $valuePublished);
                             });
 
-        if(!is_null($valuePublished)) {
-            $query->where($order, '=', $valuePublished);
-        }
-        
         $posts = $query->paginate(5);
 
         return view('admin.posts',

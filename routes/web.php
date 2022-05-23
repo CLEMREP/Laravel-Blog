@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\User\AccountController as UserAccountController;
 
 /*
@@ -59,12 +58,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard', [
-        'totalUsers' => DB::table('users')->count(),
-        'totalPosts' => DB::table('posts')->count(),
-        'totalComments' => DB::table('comments')->count(),
-    ]);
-})->middleware(['auth', 'admin'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'admin'])->name('dashboard');
 
 require __DIR__.'/auth.php';

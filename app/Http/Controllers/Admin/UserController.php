@@ -25,17 +25,16 @@ class UserController extends Controller
         $searchName = $request->get('search_title');
 
         /** @var string $valueRole */
-        $valueRole = $request->get('value');
+        $valueAdmin = $request->get('value');
 
         $query = User::query()
                             ->orderBy($order, $direction)
                             ->when($searchName, function ($query, $searchName) {
                                 $query->where('name', 'like', '%' . $searchName . '%');
+                            })
+                            ->when(!is_null($valueAdmin), function($query) use($valueAdmin, $order){
+                                $query->where($order, '=', $valueAdmin);
                             });
-
-        if(!is_null($valueRole)) {
-            $query->where($order, '=', $valueRole);
-        }
         
         $users = $query->paginate(5);
         
