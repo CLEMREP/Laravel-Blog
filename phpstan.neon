@@ -8,9 +8,9 @@ parameters:
     level: max
 
     ignoreErrors:
-#        - # escape Collection map method
-#            message: '%Parameter #1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\)\,mixed\>::(each|map|sum)\(\) expects callable\(mixed, \(int\|string\)\): .*, Closure.* given%'
-#            path: *
+        - # escape some Eloquent Builder magic. ex: ->when() method is defined to possibly return mixed type, which seems to be incorrect
+            message: '#Cannot call method [a-zA-Z0-9]+\(\) on mixed\.#'
+            path: **/Controller/*Controller.php
 
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
