@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Image;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +17,45 @@ use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
-    public function index() : View
+    public function index(Request $request) : View
     {
-        $posts = Post::orderBy('created_at')->paginate(4);
-        return view('admin.posts', ['title' => 'Articles'], compact('posts'));
+        /** @var string $order */
+        $order = $request->get('order', 'title');
+
+        /** @var string $direction */
+        $direction = $request->get('direction', 'asc');
+
+        /** @var string|null $searchTitle */
+        $searchTitle = $request->get('search_title');
+
+        /** @var string|null $valuePublished */
+        $valuePublished = $request->get('value');
+
+        $query = Post::query()
+                            ->orderBy($order, $direction)
+                            ->when($searchTitle, function ($query) use ($searchTitle) {
+                                $query->where('title', 'like', '%' . $searchTitle . '%');
+                            })
+                            ->when(!is_null($valuePublished), function ($query) use ($valuePublished, $order) {
+                                $query->where($order, '=', $valuePublished);
+                            });
+
+        $posts = $query->paginate(5);
+
+        return view(
+            'admin.posts',
+            [
+            'title' => 'Liste des articles',
+            'filters' =>
+            [
+                ['title' => 'Alphabétique (Asc)', 'order' => 'title', 'direction' => 'asc'],
+                ['title' => 'Alphabétique (Desc)', 'order' => 'title', 'direction' => 'desc'],
+                ['title' => 'Date de création (Asc)', 'order' => 'created_at', 'direction' => 'asc'],
+                ['title' => 'Date de création (Desc)', 'order' => 'created_at', 'direction' => 'desc'],
+            ],
+            ],
+            compact('posts')
+        );
     }
 
     public function show(Post $post) : View

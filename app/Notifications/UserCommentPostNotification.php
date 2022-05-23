@@ -2,9 +2,10 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class UserCommentPostNotification extends Notification
 {
@@ -36,11 +37,12 @@ class UserCommentPostNotification extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  User  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
+
         return (new MailMessage)
                     ->subject('Un nouveau commentaire a été ajouté sur l\'article "' . $this->data['post_title'] . '"')
                     ->greeting('Bonjour ' . $notifiable->name)

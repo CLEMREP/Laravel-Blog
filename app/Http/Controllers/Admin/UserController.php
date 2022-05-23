@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
@@ -12,11 +13,47 @@ use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
-    public function index() : View
+    public function index(Request $request) : View
     {
-        $users = User::orderBy('created_at')->paginate(4);
-        return view('admin.users', ['title' => 'Utilisateurs'], compact('users'));
+        /** @var string $order */
+        $order = $request->get('order', 'name');
+
+        /** @var string $direction */
+        $direction = $request->get('direction', 'asc');
+
+        /** @var string|null $searchName */
+        $searchName = $request->get('search_title');
+
+        /** @var string|null $valueAdmin */
+        $valueAdmin = $request->get('value');
+
+        $query = User::query()
+                            ->orderBy($order, $direction)
+                            ->when($searchName, function ($query, $searchName) {
+                                $query->where('name', 'like', '%' . $searchName . '%');
+                            })
+                            ->when(!is_null($valueAdmin), function ($query) use ($valueAdmin, $order) {
+                                $query->where($order, '=', $valueAdmin);
+                            });
+        
+        $users = $query->paginate(5);
+        
+        return view(
+            'admin.users',
+            [
+            'title' => 'Liste des utilisateurs',
+            'filters' =>
+            [
+                ['title' => 'Alphabétique (Asc)', 'order' => 'name', 'direction' => 'asc'],
+                ['title' => 'Alphabétique (Desc)', 'order' => 'name', 'direction' => 'desc'],
+                ['title' => 'Date de création (Asc)', 'order' => 'created_at', 'direction' => 'asc'],
+                ['title' => 'Date de création (Desc)', 'order' => 'created_at', 'direction' => 'desc'],
+            ],
+            ],
+            compact('users')
+        );
     }
+    
 
     public function create() : View
     {

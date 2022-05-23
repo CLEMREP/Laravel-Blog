@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin\User;
 
 use Tests\TestCase;
 use App\Models\User;
+use DateTime;
 
 class IndexUserTest extends TestCase
 {
@@ -15,18 +16,58 @@ class IndexUserTest extends TestCase
         $this->actingAs($user)->get(route('admin.users.index'))->assertSuccessful();
     }
 
-    /** @test */
-    public function count_number_of_users_between_array_and_database()
+    /**
+     * @test
+     */
+    public function filter_feature_works()
     {
-        $users = User::factory()->count(3)->create(['admin' => 1]);
+        $users = [
+            'Adrien' => User::factory()->create(['name' => 'Adrien', 'created_at' => now(),'admin' => 1]),
+            'Bastien' => User::factory()->create(['name' => 'Bastien', 'created_at' => now()->addDay(1), 'admin' => 0]),
+            'Clément' => User::factory()->create(['name' => 'Clément', 'created_at' => now()->addDay(2), 'admin' => 1]),
+        ];
 
-        $reponse = $this->actingAs($users[1])->get(route('admin.users.index'));
-        $data = $reponse->viewData("users");
+        foreach ($this->filterDataProvider() as $case => $caseData) {
 
-        $this->assertCount(3, $data);
+            list($params, $expected) = $caseData;
 
-        for($i=0; $i < sizeof($users); $i++) {
-            $this->assertSame($users[$i]["id"], $data[$i]["id"]);
+            $response = $this->actingAs($users['Adrien'])->get(route('admin.users.index', $params));
+            $data = $response->viewData("users");
+
+            
+            foreach ($expected as $i => $userName) {
+                $this->assertEquals($userName, $data[$i]->name, $case);
+            }
         }
+    }
+
+    private function filterDataProvider(): array
+    {
+        return [
+            'order by name asc' => [
+                ['order' => 'name', 'direction' => 'asc'],
+                ['Adrien', 'Bastien', 'Clément'],
+            ],
+            'order by name desc' =>[
+                ['order' => 'name', 'direction' => 'desc'],
+                ['Clément', 'Bastien', 'Adrien'],
+            ],
+            'order by created_at asc' =>[
+                ['order' => 'created_at', 'direction' => 'asc'],
+                ['Adrien', 'Bastien', 'Clément'],
+            ],
+            'order by created_at desc' =>[
+                ['order' => 'created_at', 'direction' => 'desc'],
+                ['Clément', 'Bastien', 'Adrien'],
+            ],
+            'admin on value 1' =>[
+                ['order' => 'admin', 'value' => '1'],
+                ['Adrien', 'Clément'],
+            ],
+            'admin on value 0' =>[
+                ['order' => 'admin', 'value' => '0'],
+                ['Bastien'],
+            ],
+        ];
     }
 }

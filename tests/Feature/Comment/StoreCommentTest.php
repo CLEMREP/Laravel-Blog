@@ -13,9 +13,9 @@ class StoreCommentTest extends TestCase
     public function can_store_comment_on_post()
     {
         $user = User::factory()->create();
-        $post = Post::factory()->create();
+        $post = Post::factory()->withAuthor($user)->create();
 
-        $this->assertDatabaseCount('users', 2);
+        $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseCount('posts', 1);
         $this->assertDatabaseCount('comments', 0);
 

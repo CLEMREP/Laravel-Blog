@@ -14,9 +14,7 @@ admin: ## Create Admin user
 	php artisan db:seed --class=UsersTableSeeder
 
 sdb: ## Seed DataBase
-	php artisan db:seed --class=UsersTableSeeder
-	php artisan db:seed --class=PostsTableSeeder
-	php artisan db:seed --class=CommentsTableSeeder
+	php artisan db:seed --class=DatabaseSeeder
 
 test: ## Run test suit
 	./vendor/bin/phpcs
