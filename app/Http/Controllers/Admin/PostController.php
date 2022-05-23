@@ -25,25 +25,26 @@ class PostController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        /** @var string $searchTitle */
+        /** @var string|null $searchTitle */
         $searchTitle = $request->get('search_title');
 
-        /** @var string $valuePublished */
+        /** @var string|null $valuePublished */
         $valuePublished = $request->get('value');
 
         $query = Post::query()
                             ->orderBy($order, $direction)
-                            ->when($searchTitle, function ($query) use($searchTitle) {
+                            ->when($searchTitle, function ($query) use ($searchTitle) {
                                 $query->where('title', 'like', '%' . $searchTitle . '%');
                             })
-                            ->when(!is_null($valuePublished), function($query) use($valuePublished, $order){
+                            ->when(!is_null($valuePublished), function ($query) use ($valuePublished, $order) {
                                 $query->where($order, '=', $valuePublished);
                             });
 
         $posts = $query->paginate(5);
 
-        return view('admin.posts',
-        [
+        return view(
+            'admin.posts',
+            [
             'title' => 'Liste des articles',
             'filters' =>
             [
@@ -52,7 +53,9 @@ class PostController extends Controller
                 ['title' => 'Date de création (Asc)', 'order' => 'created_at', 'direction' => 'asc'],
                 ['title' => 'Date de création (Desc)', 'order' => 'created_at', 'direction' => 'desc'],
             ],
-        ], compact('posts'));
+            ],
+            compact('posts')
+        );
     }
 
     public function show(Post $post) : View

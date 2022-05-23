@@ -21,10 +21,10 @@ class UserController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        /** @var string $searchName */
+        /** @var string|null $searchName */
         $searchName = $request->get('search_title');
 
-        /** @var string $valueRole */
+        /** @var string|null $valueAdmin */
         $valueAdmin = $request->get('value');
 
         $query = User::query()
@@ -32,14 +32,15 @@ class UserController extends Controller
                             ->when($searchName, function ($query, $searchName) {
                                 $query->where('name', 'like', '%' . $searchName . '%');
                             })
-                            ->when(!is_null($valueAdmin), function($query) use($valueAdmin, $order){
+                            ->when(!is_null($valueAdmin), function ($query) use ($valueAdmin, $order) {
                                 $query->where($order, '=', $valueAdmin);
                             });
         
         $users = $query->paginate(5);
         
-        return view('admin.users',
-        [
+        return view(
+            'admin.users',
+            [
             'title' => 'Liste des utilisateurs',
             'filters' =>
             [
@@ -48,7 +49,9 @@ class UserController extends Controller
                 ['title' => 'Date de création (Asc)', 'order' => 'created_at', 'direction' => 'asc'],
                 ['title' => 'Date de création (Desc)', 'order' => 'created_at', 'direction' => 'desc'],
             ],
-        ], compact('users'));
+            ],
+            compact('users')
+        );
     }
     
 

@@ -32,7 +32,7 @@ class PostFactory extends Factory
      */
     public function withAuthor($user)
     {
-        return $this->state(function (array $attributes) use($user) {
+        return $this->state(function (array $attributes) use ($user) {
             return [
                 'user_id' => $user->id,
             ];
