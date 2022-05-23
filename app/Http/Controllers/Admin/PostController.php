@@ -43,7 +43,17 @@ class PostController extends Controller
         
         $posts = $query->paginate(5);
 
-        return view('admin.posts', ['title' => 'Articles'], compact('posts'));
+        return view('admin.posts',
+        [
+            'title' => 'Liste des articles',
+            'filters' =>
+            [
+                ['title' => 'Alphabétique (Asc)', 'order' => 'title', 'direction' => 'asc'],
+                ['title' => 'Alphabétique (Desc)', 'order' => 'title', 'direction' => 'desc'],
+                ['title' => 'Date de création (Asc)', 'order' => 'created_at', 'direction' => 'asc'],
+                ['title' => 'Date de création (Desc)', 'order' => 'created_at', 'direction' => 'desc'],
+            ],
+        ], compact('posts'));
     }
 
     public function show(Post $post) : View

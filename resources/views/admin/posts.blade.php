@@ -32,10 +32,9 @@
                                   </button>
                                   <div x-show="showTri" tabindex="-1" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div x-show="showTri" @click.away="showTri = false" class="py-1">
-                                            <a href="{{ route('admin.posts.index', ['order' => 'title', 'direction' => 'asc']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Alphabétique (Asc)</a>
-                                            <a href="{{ route('admin.posts.index', ['order' => 'title', 'direction' => 'desc']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Alphabétique (Desc)</a>
-                                            <a href="{{ route('admin.posts.index', ['order' => 'created_at', 'direction' => 'asc']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Date de création (Asc)</a>
-                                            <a href="{{ route('admin.posts.index', ['order' => 'created_at', 'direction' => 'desc']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Date de création (Desc)</a>
+                                            @foreach ($filters as $filter)
+                                                <a href="{{ route('admin.posts.index', ['order' => $filter['order'], 'direction' => $filter['direction']]) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">{{ $filter['title'] }}</a>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

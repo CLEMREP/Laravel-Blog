@@ -39,8 +39,19 @@ class UserController extends Controller
         
         $users = $query->paginate(5);
         
-        return view('admin.users', ['title' => 'Liste des utilisateurs'], compact('users'));
+        return view('admin.users',
+        [
+            'title' => 'Liste des utilisateurs',
+            'filters' =>
+            [
+                ['title' => 'Alphabétique (Asc)', 'order' => 'name', 'direction' => 'asc'],
+                ['title' => 'Alphabétique (Desc)', 'order' => 'name', 'direction' => 'desc'],
+                ['title' => 'Date de création (Asc)', 'order' => 'created_at', 'direction' => 'asc'],
+                ['title' => 'Date de création (Desc)', 'order' => 'created_at', 'direction' => 'desc'],
+            ],
+        ], compact('users'));
     }
+    
 
     public function create() : View
     {
