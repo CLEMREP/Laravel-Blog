@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -59,7 +60,11 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard', [
+        'totalUsers' => DB::table('users')->count(),
+        'totalPosts' => DB::table('posts')->count(),
+        'totalComments' => DB::table('comments')->count(),
+    ]);
 })->middleware(['auth', 'admin'])->name('dashboard');
 
 require __DIR__.'/auth.php';

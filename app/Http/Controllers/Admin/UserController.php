@@ -16,25 +16,28 @@ class UserController extends Controller
     public function index(Request $request) : View
     {
         /** @var string $order */
-        $order = $request->get('order');
+        $order = $request->get('order', 'name');
 
         /** @var string $direction */
-        $direction = $request->get('direction');
+        $direction = $request->get('direction', 'asc');
 
-        if (!is_null($request->get('order')) && !is_null($request->get('value'))) {
-            $users = User::select('*')->where($order, '=', $request->get('value'))->paginate(5);
-        } else {
-            if (!is_null($request->get('search_user'))) {
-                $users = User::select('*')->where('name', 'like', '%' . $request->get('search_user') . '%')
-                ->paginate(5);
-            } else {
-                if (!is_null($request->get('order')) && !is_null($request->get('direction'))) {
-                    $users = User::orderBy($order, $direction)->paginate(5);
-                } else {
-                    $users = User::orderBy('name', 'asc')->paginate(5);
-                }
-            }
+        /** @var string $searchName */
+        $searchName = $request->get('search_title');
+
+        /** @var string $valueRole */
+        $valueRole = $request->get('value');
+
+        $query = User::query()
+                            ->orderBy($order, $direction)
+                            ->when($searchName, function ($query, $searchName) {
+                                $query->where('name', 'like', '%' . $searchName . '%');
+                            });
+
+        if(!is_null($valueRole)) {
+            $query->where($order, '=', $valueRole);
         }
+        
+        $users = $query->paginate(5);
         
         return view('admin.users', ['title' => 'Liste des utilisateurs'], compact('users'));
     }

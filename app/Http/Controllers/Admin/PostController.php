@@ -20,26 +20,28 @@ class PostController extends Controller
     public function index(Request $request) : View
     {
         /** @var string $order */
-        $order = $request->get('order');
+        $order = $request->get('order', 'title');
 
         /** @var string $direction */
-        $direction = $request->get('direction');
+        $direction = $request->get('direction', 'asc');
 
-        if (!is_null($request->get('order')) && !is_null($request->get('value'))) {
-            $posts = Post::select('*')->where($order, '=', $request->get('value'))->paginate(5);
-        } else {
-            if (!is_null($request->get('search_title'))) {
-                $posts = Post::select('*')->where('title', 'like', '%'.$request->get('search_title') . '%')
-                                          ->paginate(5);
-            } else {
-                if (!is_null($request->get('order')) && !is_null($request->get('direction'))) {
-                    $posts = Post::orderBy($order, $direction)->paginate(5);
-                } else {
-                    $posts = Post::orderBy('title', 'asc')->paginate(5);
-                }
-            }
+        /** @var string $searchTitle */
+        $searchTitle = $request->get('search_title');
+
+        /** @var string $valuePublished */
+        $valuePublished = $request->get('value');
+
+        $query = Post::query()
+                            ->orderBy($order, $direction)
+                            ->when($searchTitle, function ($query, $searchTitle) {
+                                $query->where('title', 'like', '%' . $searchTitle . '%');
+                            });
+
+        if(!is_null($valuePublished)) {
+            $query->where($order, '=', $valuePublished);
         }
-
+        
+        $posts = $query->paginate(5);
 
         return view('admin.posts', ['title' => 'Articles'], compact('posts'));
     }

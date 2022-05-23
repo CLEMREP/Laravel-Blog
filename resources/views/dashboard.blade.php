@@ -34,7 +34,7 @@
                             </svg>
                         </div>
                         <div class="mx-5">
-                            <h4 class="text-2xl font-semibold text-gray-700">{{ DB::table('users')->count() }}</h4>
+                            <h4 class="text-2xl font-semibold text-gray-700">{{ $totalUsers }}</h4>
                             <div class="text-gray-500">Nombre d'utilisateurs</div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                             </svg>
                         </div>
                         <div class="mx-5">
-                            <h4 class="text-2xl font-semibold text-gray-700">{{ DB::table('posts')->count() }}</h4>
+                            <h4 class="text-2xl font-semibold text-gray-700">{{ $totalPosts }}</h4>
                             <div class="text-gray-500">Nombre d'articles</div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                             </svg>
                         </div>
                         <div class="mx-5">
-                            <h4 class="text-2xl font-semibold text-gray-700">{{ DB::table('comments')->count() }}</h4>
+                            <h4 class="text-2xl font-semibold text-gray-700">{{ $totalComments }}</h4>
                             <div class="text-gray-500">Nombre de commentaires</div>
                         </div>
                     </div>
