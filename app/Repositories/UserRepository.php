@@ -69,6 +69,11 @@ class UserRepository
         }
     }
 
+    public function deleteUser(User $user)
+    {
+        return $user->delete();
+    }
+
     public function countUser() : int
     {
         return $this->model->newQuery()->count();

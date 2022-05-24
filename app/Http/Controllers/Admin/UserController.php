@@ -96,7 +96,7 @@ class UserController extends Controller
 
     public function destroy(User $user) : RedirectResponse
     {
-        $user->delete();
+        $this->userRepository->deleteUser($user);
 
         return redirect('/dashboard/users');
     }
