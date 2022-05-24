@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -69,9 +70,14 @@ class UserRepository
         }
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(User $user) : mixed
     {
         return $user->delete();
+    }
+
+    public function getUsersOnComment(Collection $userId) : Collection
+    {
+        return $this->model->newQuery()->whereIn('id', $userId)->get();
     }
 
     public function countUser() : int

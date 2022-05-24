@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
+use App\Repositories\CommentRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StoreCommentRequest;
@@ -13,6 +15,9 @@ use App\Notifications\UserCommentPostNotification;
 
 class CommentController extends Controller
 {
+    public function __construct(private CommentRepository $commentRepository, private UserRepository $userRepository)
+    {
+    }
     public function store(StoreCommentRequest $request, Post $post) : RedirectResponse
     {
         /** @var Post $post */
@@ -21,13 +26,12 @@ class CommentController extends Controller
         /** @var User $userComment */
         $userComment = Auth::user();
 
-        $request->validated();
+        $keys = ['post' => $post, 'userComment' => $userComment];
 
-        Comment::create([
-            'content' => $request->content,
-            'post_id' => $post->getKey(),
-            'user_id' => $userComment->getKey(),
-        ]);
+        /** @var array $validated */
+        $validated = $request->validated();
+
+        $this->commentRepository->storeComment($validated, $keys);
 
         $data =
         [
@@ -36,8 +40,10 @@ class CommentController extends Controller
             'post_id' => $post->getKey()
         ];
 
-        $userIdCol = Comment::select('user_id')->where('post_id', $post->getKey())->distinct()->get();
-        $userCol = User::whereIn('id', $userIdCol)->get();
+
+        $userIdCol = $this->commentRepository->getAllUserOnPost($post);
+
+        $userCol = $this->userRepository->getUsersOnComment($userIdCol);
         $userCol->push($post->author);
 
         Notification::send($userCol, new UserCommentPostNotification($data));
