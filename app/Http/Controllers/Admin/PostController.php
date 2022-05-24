@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
+use App\Repositories\PostRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StorePostRequest;
@@ -17,6 +18,10 @@ use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
+    public function __construct(private PostRepository $PostRepository)
+    {
+    }
+
     public function index(Request $request) : View
     {
         /** @var string $order */
@@ -31,16 +36,7 @@ class PostController extends Controller
         /** @var string|null $valuePublished */
         $valuePublished = $request->get('value');
 
-        $query = Post::query()
-                            ->orderBy($order, $direction)
-                            ->when($searchTitle, function ($query) use ($searchTitle) {
-                                $query->where('title', 'like', '%' . $searchTitle . '%');
-                            })
-                            ->when(!is_null($valuePublished), function ($query) use ($valuePublished, $order) {
-                                $query->where($order, '=', $valuePublished);
-                            });
-
-        $posts = $query->paginate(5);
+        $posts = $this->PostRepository->allPostWithFilters($order, $direction, $searchTitle, $valuePublished);
 
         return view(
             'admin.posts',
@@ -79,21 +75,14 @@ class PostController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $post = Post::create(
-            [
-                'title' => $request->title,
-                'content' => $request->content,
-                'user_id' => $user->id,
-                'published' => $request->published,
-            ]
-        );
+        $post = $this->PostRepository->storePost($request, $user);
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
             /** @var String $path */
             $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
- 
+
             $image = new Image();
             $image->path = $path;
             $image->save();
@@ -116,7 +105,8 @@ class PostController extends Controller
     {
         /** @var array $data */
         $data = $request->validated();
-        $post->update($data);
+
+        $this->PostRepository->updatePost($data, $post);
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
@@ -133,7 +123,7 @@ class PostController extends Controller
                 $image = new Image();
                 $image->path = $path;
                 $image->save();
-    
+
                 $post->image_id = $image->id;
                 $post->save();
             }
@@ -145,7 +135,7 @@ class PostController extends Controller
     public function destroy(post $post) : RedirectResponse
     {
         $post->delete();
-        
+
         if ($post->image) {
             /** @var string $oldPath */
             $oldPath = $post->image->path;
