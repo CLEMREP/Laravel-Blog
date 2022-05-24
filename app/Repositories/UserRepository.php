@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class UserRepository 
+class UserRepository
 {
     public function __construct(private User $model)
     {
@@ -74,5 +74,3 @@ class UserRepository
         return $this->model->newQuery()->count();
     }
 }
-
-?>

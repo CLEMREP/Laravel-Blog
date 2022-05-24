@@ -54,6 +54,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request) : RedirectResponse
     {
+        /** @var array $validated */
         $validated = $request->validated();
 
         /** @var string $password */
@@ -76,6 +77,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user) : RedirectResponse
     {
+        /** @var array $validated */
         $validated = $request->validated();
 
         /** @var string $password */

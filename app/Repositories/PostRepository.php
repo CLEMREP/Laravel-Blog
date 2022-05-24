@@ -6,7 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PostRepository 
+class PostRepository
 {
     public function __construct(private Post $model)
     {
@@ -28,7 +28,8 @@ class PostRepository
                             })
                             ->when(!is_null($valuePublished), function ($query) use ($valuePublished, $order) {
                                 $query->where($order, '=', $valuePublished);
-                            });;
+                            });
+        ;
         
         $posts = $query->paginate(5);
 
@@ -71,5 +72,3 @@ class PostRepository
         return $this->model->newQuery()->count();
     }
 }
-
-?>
