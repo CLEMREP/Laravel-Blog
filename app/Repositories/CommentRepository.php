@@ -28,4 +28,9 @@ class CommentRepository
     {
         return $this->model->select('user_id')->where('post_id', $post->getKey())->distinct()->get();
     }
+
+    public function countComment() : int
+    {
+        return $this->model->newQuery()->count();
+    }
 }
