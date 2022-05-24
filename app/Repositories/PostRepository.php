@@ -3,7 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Post;
-use App\Http\Requests\StorePostRequest;
+use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostRepository 
 {
@@ -11,8 +12,15 @@ class PostRepository
     {
     }
 
-    public function allPostWithFilters($order, $direction, $searchTitle, $valuePublished)
+    public function allPostWithFilters(array $filters, string $order, string $direction) : LengthAwarePaginator
     {
+
+        /** @var string|null $searchTitle */
+        $searchTitle = $filters['search_title'] ?? null;
+
+        /** @var string|null $valuePublished */
+        $valuePublished = $filters['value'] ?? null;
+
         $query = $this->model->newQuery()
                             ->orderBy($order, $direction)
                             ->when($searchTitle, function ($query) use ($searchTitle) {
@@ -27,23 +35,40 @@ class PostRepository
         return $posts;
     }
 
-    public function storePost(StorePostRequest $request, $user)
+    public function publishedPost() : LengthAwarePaginator
+    {
+        return $this->model->newQuery()->where('published', 1)->orderBy('created_at')->paginate(5);
+    }
+
+    public function storePost(array $data, User $user) : Post
     {
         return $this->model->create(
             [
-                'title' => $request->title,
-                'content' => $request->content,
+                'title' => $data['title'],
+                'content' => $data['content'],
                 'user_id' => $user->id,
-                'published' => $request->published,
+                'published' => $data['published'],
             ]
         );
     }
 
-    public function updatePost($data, $post)
+    public function updatePost(array $data, Post $post) : mixed
     {
         return $this->model->newQuery()
                             ->where('id', $post->id)
                             ->update($data);
+    }
+
+    public function deletePost(Post $post) : mixed
+    {
+        return $this->model->newQuery()
+                            ->where('id', $post->id)
+                            ->delete();
+    }
+
+    public function countPost() : int
+    {
+        return $this->model->newQuery()->count();
     }
 }
 

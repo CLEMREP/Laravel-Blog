@@ -18,7 +18,7 @@ use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
-    public function __construct(private PostRepository $PostRepository)
+    public function __construct(private PostRepository $postRepository)
     {
     }
 
@@ -30,13 +30,9 @@ class PostController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        /** @var string|null $searchTitle */
-        $searchTitle = $request->get('search_title');
-
-        /** @var string|null $valuePublished */
-        $valuePublished = $request->get('value');
-
-        $posts = $this->PostRepository->allPostWithFilters($order, $direction, $searchTitle, $valuePublished);
+        $filters = $request->only(['searchTitle', 'value']);
+        
+        $posts = $this->postRepository->allPostWithFilters($filters, $order, $direction);
 
         return view(
             'admin.posts',
@@ -69,13 +65,13 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request) : RedirectResponse
     {
-        /** @var array $data */
-        $data = $request->validated();
+        /** @var array $validated */
+        $validated = $request->validated();
 
         /** @var User $user */
         $user = Auth::user();
 
-        $post = $this->PostRepository->storePost($request, $user);
+        $post = $this->postRepository->storePost($validated, $user);
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
@@ -106,7 +102,7 @@ class PostController extends Controller
         /** @var array $data */
         $data = $request->validated();
 
-        $this->PostRepository->updatePost($data, $post);
+        $this->postRepository->updatePost($data, $post);
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
@@ -134,7 +130,7 @@ class PostController extends Controller
 
     public function destroy(post $post) : RedirectResponse
     {
-        $post->delete();
+        $this->postRepository->deletePost($post);
 
         if ($post->image) {
             /** @var string $oldPath */
