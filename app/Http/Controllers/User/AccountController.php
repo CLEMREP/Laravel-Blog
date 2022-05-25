@@ -30,13 +30,7 @@ class AccountController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        /** @var string $password */
-        $password = $request->password;
-
-        /** @var array $params */
-        $params = ['user' => $user, 'password' => $password];
-
-        $this->accountRepository->updateAccount($validated, $params);
+        $this->accountRepository->updateAccount($validated, $user);
 
         return redirect(route('account.edit'));
     }

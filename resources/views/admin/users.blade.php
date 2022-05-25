@@ -48,8 +48,8 @@
                                     </button>
                                     <div x-show="showFilters" tabindex="-1" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                           <div x-show="showFilters" @click.away="showFilters = false" class="py-1">
-                                              <a href="{{ route('admin.users.index', ['order' => 'admin', 'value' => '1']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Admin</a>
-                                              <a href="{{ route('admin.users.index', ['order' => 'admin', 'value' => '0']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Pas admin</a>
+                                              <a href="{{ route('admin.users.index', ['admin' => '1']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Admin</a>
+                                              <a href="{{ route('admin.users.index', ['admin' => '0']) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Pas admin</a>
                                           </div>
                                       </div>
                                   </div>

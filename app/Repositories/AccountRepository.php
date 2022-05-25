@@ -7,27 +7,22 @@ use Illuminate\Support\Facades\Hash;
 
 class AccountRepository
 {
-    public function __construct(private User $model)
+    public function __construct()
     {
     }
 
-    public function updateAccount(array $data, array $params) : mixed
+    public function updateAccount(array $data, User $user) : mixed
     {
-        if (is_null($params['password'])) {
-            return $this->model->newQuery()->where('id', $params['user']->id)->update(
-                [
-                    'name' => $data['username'],
-                    'email' => $data['email'],
-                ]
-            );
+        $attributes = [
+            'name' => $data['username'],
+            'email' => $data['email'],
+        ];
+
+        if (empty($data['password'])) {
+            return $user->update($attributes);
         } else {
-            return $this->model->newQuery()->where('id', $params['user']->id)->update(
-                [
-                    'name' => $data['username'],
-                    'email' => $data['email'],
-                    'password' => Hash::make($params['password']),
-                ]
-            );
+            $attributes['password'] = Hash::make($data['password']);
+            return $user->update($attributes);
         }
     }
 }

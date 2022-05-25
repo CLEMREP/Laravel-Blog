@@ -11,8 +11,11 @@ use App\Repositories\UserRepository;
 
 class DashboardController extends Controller
 {
-    public function __construct(private PostRepository $postRepository, private UserRepository $userRepository, private CommentRepository $commentRepository)
-    {
+    public function __construct(
+        private PostRepository $postRepository,
+        private UserRepository $userRepository,
+        private CommentRepository $commentRepository
+    ) {
     }
     
     public function index() : View

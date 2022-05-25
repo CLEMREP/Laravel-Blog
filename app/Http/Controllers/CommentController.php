@@ -26,12 +26,10 @@ class CommentController extends Controller
         /** @var User $userComment */
         $userComment = Auth::user();
 
-        $keys = ['post' => $post, 'userComment' => $userComment];
-
         /** @var array $validated */
         $validated = $request->validated();
 
-        $this->commentRepository->storeComment($validated, $keys);
+        $this->commentRepository->storeComment($validated, $post, $userComment);
 
         $data =
         [
@@ -41,7 +39,7 @@ class CommentController extends Controller
         ];
 
 
-        $userIdCol = $this->commentRepository->getAllUserOnPost($post);
+        $userIdCol = $this->commentRepository->getAllUserIdOnPost($post);
 
         $userCol = $this->userRepository->getUsersOnComment($userIdCol);
         $userCol->push($post->author);

@@ -19,22 +19,19 @@ class UserRepository
         /** @var string|null $searchTitle */
         $searchTitle = $filters['searchName'] ?? null;
 
-        /** @var string|null $valuePublished */
-        $valuePublished = $filters['value'] ?? null;
-
+        /** @var string|null $adminValue */
+        $adminValue = $filters['admin'] ?? null;
 
         $query = User::query()
                             ->orderBy($order, $direction)
                             ->when($searchTitle, function ($query, $searchTitle) {
                                 $query->where('name', 'like', '%' . $searchTitle . '%');
                             })
-                            ->when(!is_null($valuePublished), function ($query) use ($valuePublished, $order) {
-                                $query->where($order, '=', $valuePublished);
+                            ->when(isset($adminValue), function ($query) use ($adminValue) {
+                                $query->where('admin', '=', $adminValue);
                             });
         
-        $users = $query->paginate(5);
-
-        return $users;
+        return $query->paginate(5);
     }
 
     public function storeUser(array $data, string $password) : User
@@ -48,29 +45,23 @@ class UserRepository
         );
     }
 
-    public function updateUser(array $data, array $params) : mixed
+    public function updateUser(array $data, User $user, bool $adminValue) : bool
     {
-        if (empty($params['password'])) {
-            return $this->model->where('id', $params['user']->id)->update(
-                [
-                    'name' => $data['username'],
-                    'email' => $data['email'],
-                    'admin' => $params['adminValue'],
-                ]
-            );
+        $attributes = [
+            'name' => $data['username'],
+            'email' => $data['email'],
+            'admin' => $adminValue,
+        ];
+
+        if (empty($data['password'])) {
+            return $user->update($attributes);
         } else {
-            return $this->model->where('id', $params['user']->id)->update(
-                [
-                    'name' => $data['username'],
-                    'email' => $data['email'],
-                    'password' => Hash::make($params['password']),
-                    'admin' => $params['adminValue'],
-                ]
-            );
+            $attributes['password'] = Hash::make($data['password']);
+            return $user->update($attributes);
         }
     }
 
-    public function deleteUser(User $user) : mixed
+    public function deleteUser(User $user) : bool|null
     {
         return $user->delete();
     }

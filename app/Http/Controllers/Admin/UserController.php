@@ -26,7 +26,7 @@ class UserController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        $filters = $request->only(['searchName', 'value']);
+        $filters = $request->only(['searchName', 'admin']);
 
         $users = $this->userRepository->allUserWithFilters($filters, $order, $direction);
         
@@ -86,10 +86,7 @@ class UserController extends Controller
         /** @var bool $adminValue */
         $adminValue = $request->get('admin', false);
 
-        /** @var array $params */
-        $params = ['user' => $user, 'password' => $password, 'adminValue' => $adminValue];
-
-        $this->userRepository->updateUser($validated, $params);
+        $this->userRepository->updateUser($validated, $user, $adminValue);
 
         return redirect('/dashboard/users');
     }

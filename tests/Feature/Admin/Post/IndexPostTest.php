@@ -61,11 +61,11 @@ class IndexUserTest extends TestCase
                 ['C', 'B', 'A'],
             ],
             'published on value 1' =>[
-                ['order' => 'published', 'value' => '1'],
+                ['published' => '1'],
                 ['A', 'C'],
             ],
             'published on value 0' =>[
-                ['order' => 'published', 'value' => '0'],
+                ['published' => '0'],
                 ['B'],
             ],
         ];

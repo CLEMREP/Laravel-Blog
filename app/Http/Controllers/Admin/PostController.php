@@ -30,7 +30,7 @@ class PostController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        $filters = $request->only(['searchTitle', 'value']);
+        $filters = $request->only(['searchTitle', 'published']);
         
         $posts = $this->postRepository->allPostWithFilters($filters, $order, $direction);
 
@@ -76,15 +76,11 @@ class PostController extends Controller
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
-            /** @var String $path */
+
+            /** @var string $path */
             $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
 
-            $image = new Image();
-            $image->path = $path;
-            $image->save();
-
-            $post->image_id = $image->id;
-            $post->save();
+            $this->postRepository->uploadImageOnPost($post, $path);
         };
 
 
@@ -107,22 +103,17 @@ class PostController extends Controller
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
+
             /** @var String $path */
             $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
-            if ($post->image) {
-                /** @var string $oldPath */
-                $oldPath = $post->image->path;
-                $post->image->path = $path;
-                $post->image->save();
-                Storage::disk('public')->delete($oldPath);
-            } else {
-                $image = new Image();
-                $image->path = $path;
-                $image->save();
 
-                $post->image_id = $image->id;
-                $post->save();
+            /** @var string|null $oldPath */
+            $oldPath = $post->image?->path;
+
+            if (isset($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
             }
+            $this->postRepository->updateImageOnPost($post, $path);
         };
 
         return redirect('/dashboard/posts');
