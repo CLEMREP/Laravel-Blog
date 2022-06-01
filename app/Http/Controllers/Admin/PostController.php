@@ -80,7 +80,7 @@ class PostController extends Controller
             /** @var string $path */
             $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
 
-            $this->postRepository->uploadImageOnPost($post, $path);
+            $this->postRepository->updateOrUploadImageOnPost($post, $path);
         };
 
 
@@ -113,7 +113,7 @@ class PostController extends Controller
             if (isset($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
             }
-            $this->postRepository->updateImageOnPost($post, $path);
+            $this->postRepository->updateOrUploadImageOnPost($post, $path);
         };
 
         return redirect('/dashboard/posts');

@@ -80,21 +80,19 @@ class UserController extends Controller
         /** @var array $validated */
         $validated = $request->validated();
 
-        /** @var string $password */
-        $password = $request->password ?? '';
-
         /** @var bool $adminValue */
         $adminValue = $request->get('admin', false);
+        $validated['admin'] = $adminValue;
+        
+        $this->userRepository->updateUser($validated, $user);
 
-        $this->userRepository->updateUser($validated, $user, $adminValue);
-
-        return redirect('/dashboard/users');
+        return redirect(route('admin.users.index'));
     }
 
     public function destroy(User $user) : RedirectResponse
     {
         $this->userRepository->deleteUser($user);
 
-        return redirect('/dashboard/users');
+        return redirect(route('admin.users.index'));
     }
 }

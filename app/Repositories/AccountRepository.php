@@ -18,11 +18,10 @@ class AccountRepository
             'email' => $data['email'],
         ];
 
-        if (empty($data['password'])) {
-            return $user->update($attributes);
-        } else {
+        if (!empty($data['password'])) {
             $attributes['password'] = Hash::make($data['password']);
-            return $user->update($attributes);
         }
+        
+        return $user->update($attributes);
     }
 }

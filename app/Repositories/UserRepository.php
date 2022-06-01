@@ -45,12 +45,12 @@ class UserRepository
         );
     }
 
-    public function updateUser(array $data, User $user, bool $adminValue) : bool
+    public function updateUser(array $data, User $user) : bool
     {
         $attributes = [
             'name' => $data['username'],
             'email' => $data['email'],
-            'admin' => $adminValue,
+            'admin' => isset($data['admin']) ? (bool) $data['admin'] : false,
         ];
 
         if (empty($data['password'])) {

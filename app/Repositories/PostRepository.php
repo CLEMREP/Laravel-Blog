@@ -66,7 +66,7 @@ class PostRepository
         return $post->delete();
     }
 
-    public function uploadImageOnPost(Post $post, string $path) : void
+    public function updateOrUploadImageOnPost(Post $post, string $path) : void
     {
         $image = $post->image ?? new Image();
         $image->path = $path;
@@ -74,21 +74,6 @@ class PostRepository
 
         $post->image_id = $image->id;
         $post->save();
-    }
-
-    public function updateImageOnPost(Post $post, string $path) : void
-    {
-        if ($post->image) {
-            $post->image->path = $path;
-            $post->image->save();
-        } else {
-            $image = new Image();
-            $image->path = $path;
-            $image->save();
-
-            $post->image_id = $image->id;
-            $post->save();
-        }
     }
 
     public function countPost() : int
