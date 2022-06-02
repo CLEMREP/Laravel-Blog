@@ -66,7 +66,7 @@ class PostRepository
         return $post->delete();
     }
 
-    public function updateOrUploadImageOnPost(Post $post, string $path) : void
+    public function updateOrCreateImageOnPost(Post $post, string $path) : void
     {
         $image = $post->image ?? new Image();
         $image->path = $path;

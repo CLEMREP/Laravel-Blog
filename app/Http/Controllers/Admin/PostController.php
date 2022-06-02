@@ -30,7 +30,7 @@ class PostController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        $filters = $request->only(['searchTitle', 'published']);
+        $filters = $request->only(['search_title', 'published']);
         
         $posts = $this->postRepository->allPostWithFilters($filters, $order, $direction);
 
@@ -80,7 +80,7 @@ class PostController extends Controller
             /** @var string $path */
             $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
 
-            $this->postRepository->updateOrUploadImageOnPost($post, $path);
+            $this->postRepository->updateOrCreateImageOnPost($post, $path);
         };
 
 
@@ -113,7 +113,7 @@ class PostController extends Controller
             if (isset($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
             }
-            $this->postRepository->updateOrUploadImageOnPost($post, $path);
+            $this->postRepository->updateOrCreateImageOnPost($post, $path);
         };
 
         return redirect('/dashboard/posts');

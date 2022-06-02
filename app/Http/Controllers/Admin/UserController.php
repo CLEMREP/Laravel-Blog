@@ -26,7 +26,7 @@ class UserController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        $filters = $request->only(['searchName', 'admin']);
+        $filters = $request->only(['search_user', 'admin']);
 
         $users = $this->userRepository->allUserWithFilters($filters, $order, $direction);
         

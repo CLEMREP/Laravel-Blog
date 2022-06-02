@@ -16,16 +16,16 @@ class UserRepository
     public function allUserWithFilters(array $filters, string $order, string $direction) : LengthAwarePaginator
     {
 
-        /** @var string|null $searchTitle */
-        $searchTitle = $filters['searchName'] ?? null;
+        /** @var string|null $searchName */
+        $searchName = $filters['search_user'] ?? null;
 
         /** @var string|null $adminValue */
         $adminValue = $filters['admin'] ?? null;
 
         $query = User::query()
                             ->orderBy($order, $direction)
-                            ->when($searchTitle, function ($query, $searchTitle) {
-                                $query->where('name', 'like', '%' . $searchTitle . '%');
+                            ->when($searchName, function ($query, $searchName) {
+                                $query->where('name', 'like', '%' . $searchName . '%');
                             })
                             ->when(isset($adminValue), function ($query) use ($adminValue) {
                                 $query->where('admin', '=', $adminValue);
@@ -41,6 +41,7 @@ class UserRepository
                 'name' => $data['username'],
                 'email' => $data['email'],
                 'password' => Hash::make($password),
+                'admin' => isset($data['admin']) ? (bool) $data['admin'] : false,
             ]
         );
     }
@@ -53,12 +54,11 @@ class UserRepository
             'admin' => isset($data['admin']) ? (bool) $data['admin'] : false,
         ];
 
-        if (empty($data['password'])) {
-            return $user->update($attributes);
-        } else {
+        if (!empty($data['password'])) {
             $attributes['password'] = Hash::make($data['password']);
-            return $user->update($attributes);
         }
+
+        return $user->update($attributes);
     }
 
     public function deleteUser(User $user) : bool|null
