@@ -10,9 +10,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Repositories\UserRepository;
 
 class UserController extends Controller
 {
+    public function __construct(private UserRepository $userRepository)
+    {
+    }
+
     public function index(Request $request) : View
     {
         /** @var string $order */
@@ -21,22 +26,9 @@ class UserController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        /** @var string|null $searchName */
-        $searchName = $request->get('search_title');
+        $filters = $request->only(['search_user', 'admin']);
 
-        /** @var string|null $valueAdmin */
-        $valueAdmin = $request->get('value');
-
-        $query = User::query()
-                            ->orderBy($order, $direction)
-                            ->when($searchName, function ($query, $searchName) {
-                                $query->where('name', 'like', '%' . $searchName . '%');
-                            })
-                            ->when(!is_null($valueAdmin), function ($query) use ($valueAdmin, $order) {
-                                $query->where($order, '=', $valueAdmin);
-                            });
-        
-        $users = $query->paginate(5);
+        $users = $this->userRepository->allUserWithFilters($filters, $order, $direction);
         
         return view(
             'admin.users',
@@ -62,17 +54,13 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request) : RedirectResponse
     {
-        $data = $request->validated();
+        /** @var array $validated */
+        $validated = $request->validated();
+
         /** @var string $password */
         $password = $request->password;
         
-        $user = User::create(
-            [
-            'name' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($password),
-            ]
-        );
+        $user = $this->userRepository->storeUser($validated, $password);
 
         if ($request->has('admin')) {
             $user->admin = true;
@@ -89,37 +77,22 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user) : RedirectResponse
     {
-        $request->validated();
-        /** @var string $password */
-        $password = $request->password;
-        if (is_null($request->password)) {
-            $user->update(
-                [
-                    'name' => $request->username,
-                    'email' => $request->email,
-                    'admin' => $request->get('admin', false)
-                ]
-            );
-        } else {
-            $user->update(
-                [
-                    'name' => $request->username,
-                    'email' => $request->email,
-                    'password' => Hash::make($password),
-                    'admin' => $request->get('admin', false)
-                ]
-            );
-        }
+        /** @var array $validated */
+        $validated = $request->validated();
 
+        /** @var bool $adminValue */
+        $adminValue = $request->get('admin', false);
+        $validated['admin'] = $adminValue;
+        
+        $this->userRepository->updateUser($validated, $user);
 
-
-        return redirect('/dashboard/users');
+        return redirect(route('admin.users.index'));
     }
 
     public function destroy(User $user) : RedirectResponse
     {
-        $user->delete();
+        $this->userRepository->deleteUser($user);
 
-        return redirect('/dashboard/users');
+        return redirect(route('admin.users.index'));
     }
 }

@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
+use App\Repositories\PostRepository;
 
 class PostController extends Controller
 {
+    public function __construct(private PostRepository $postRepository)
+    {
+    }
+    
     public function index() : View
     {
-        $posts = Post::where('published', 1)->orderBy('created_at')->paginate(4);
+        $posts = $this->postRepository->publishedPost();
         return view('posts', ['title' => 'Articles', 'posts' => $posts]);
     }
 

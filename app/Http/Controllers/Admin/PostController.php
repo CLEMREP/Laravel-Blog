@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use App\Http\Controllers\Controller;
+use App\Repositories\PostRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StorePostRequest;
@@ -17,6 +18,10 @@ use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
+    public function __construct(private PostRepository $postRepository)
+    {
+    }
+
     public function index(Request $request) : View
     {
         /** @var string $order */
@@ -25,22 +30,9 @@ class PostController extends Controller
         /** @var string $direction */
         $direction = $request->get('direction', 'asc');
 
-        /** @var string|null $searchTitle */
-        $searchTitle = $request->get('search_title');
-
-        /** @var string|null $valuePublished */
-        $valuePublished = $request->get('value');
-
-        $query = Post::query()
-                            ->orderBy($order, $direction)
-                            ->when($searchTitle, function ($query) use ($searchTitle) {
-                                $query->where('title', 'like', '%' . $searchTitle . '%');
-                            })
-                            ->when(!is_null($valuePublished), function ($query) use ($valuePublished, $order) {
-                                $query->where($order, '=', $valuePublished);
-                            });
-
-        $posts = $query->paginate(5);
+        $filters = $request->only(['search_title', 'published']);
+        
+        $posts = $this->postRepository->allPostWithFilters($filters, $order, $direction);
 
         return view(
             'admin.posts',
@@ -73,33 +65,22 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request) : RedirectResponse
     {
-        /** @var array $data */
-        $data = $request->validated();
+        /** @var array $validated */
+        $validated = $request->validated();
 
         /** @var User $user */
         $user = Auth::user();
 
-        $post = Post::create(
-            [
-                'title' => $request->title,
-                'content' => $request->content,
-                'user_id' => $user->id,
-                'published' => $request->published,
-            ]
-        );
+        $post = $this->postRepository->storePost($validated, $user);
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
-            /** @var String $path */
-            $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
- 
-            $image = new Image();
-            $image->path = $path;
-            $image->save();
 
-            $post->image_id = $image->id;
-            $post->save();
+            /** @var string $path */
+            $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
+
+            $this->postRepository->updateOrCreateImageOnPost($post, $path);
         };
 
 
@@ -116,27 +97,23 @@ class PostController extends Controller
     {
         /** @var array $data */
         $data = $request->validated();
-        $post->update($data);
+
+        $this->postRepository->updatePost($data, $post);
 
         if ($request->hasFile('picture')) {
             /** @var UploadedFile $uploadPicture */
             $uploadPicture = $request->picture;
+
             /** @var String $path */
             $path = $uploadPicture->storeAs('pictures_posts', time() . '.' . $uploadPicture->extension(), 'public');
-            if ($post->image) {
-                /** @var string $oldPath */
-                $oldPath = $post->image->path;
-                $post->image->path = $path;
-                $post->image->save();
+
+            /** @var string|null $oldPath */
+            $oldPath = $post->image?->path;
+
+            if (isset($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
-            } else {
-                $image = new Image();
-                $image->path = $path;
-                $image->save();
-    
-                $post->image_id = $image->id;
-                $post->save();
             }
+            $this->postRepository->updateOrCreateImageOnPost($post, $path);
         };
 
         return redirect('/dashboard/posts');
@@ -144,8 +121,8 @@ class PostController extends Controller
 
     public function destroy(post $post) : RedirectResponse
     {
-        $post->delete();
-        
+        $this->postRepository->deletePost($post);
+
         if ($post->image) {
             /** @var string $oldPath */
             $oldPath = $post->image->path;
